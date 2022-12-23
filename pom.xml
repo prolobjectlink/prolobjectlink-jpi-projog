@@ -1,0 +1,820 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.github.prolobjectlink</groupId>
+	<artifactId>prolobjectlink-jpi-projog</artifactId>
+	<version>1.2-SNAPSHOT</version>
+	<name>prolobjectlink-jpi-projog</name>
+	<!-- <packaging>bundle</packaging> -->
+	<description>Java Prolog Interface Implementation over Projog</description>
+
+	<url>https://prolobjectlink.github.io/${project.name}</url>
+	<inceptionYear>2020</inceptionYear>
+
+	<organization>
+		<name>Prolobjectlink Project</name>
+		<url>https://prolobjectlink.github.io/${project.name}</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>jzalacain</id>
+			<name>Jose Zalacain</name>
+			<email>jzalacainllanes@gmail.com</email>
+			<organization>Prolobjectlink Project</organization>
+			<organizationUrl>https://prolobjectlink.github.io/${project.name}</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+				<role>founder</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+
+	<scm>
+		<developerConnection>scm:git:https://github.com/prolobjectlink/${project.name}.git</developerConnection>
+		<connection>scm:git:https://github.com/prolobjectlink/${project.name}.git</connection>
+		<url>https://prolobjectlink.github.io/${project.name}</url>
+		<tag>v@{project.version}</tag>
+	</scm>
+
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/prolobjectlink/prolobjectlink-jpi-projog/actions</url>
+	</ciManagement>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/prolobjectlink/${project.name}/issues</url>
+	</issueManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>Developer List</name>
+			<subscribe>prolobjectlink+subscribe@googlegroups.com</subscribe>
+			<unsubscribe>prolobjectlink+unsubscribe@googlegroups.com</unsubscribe>
+			<post>prolobjectlink@googlegroups.com</post>
+			<archive>http://groups.google.com/group/prolobjectlink</archive>
+		</mailingList>
+		<mailingList>
+			<name>Users List</name>
+			<subscribe>prolobjectlink+subscribe@googlegroups.com</subscribe>
+			<unsubscribe>prolobjectlink+unsubscribe@googlegroups.com</unsubscribe>
+			<post>prolobjectlink@googlegroups.com</post>
+			<archive>http://groups.google.com/group/prolobjectlink</archive>
+		</mailingList>
+	</mailingLists>
+
+	<repositories>
+		<repository>
+			<id>ossrh</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+		<site>
+			<id>website</id>
+			<url>https://prolobjectlink.github.io/${project.name}</url>
+		</site>
+	</distributionManagement>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.github.prolobjectlink</groupId>
+			<artifactId>prolobjectlink-jpi</artifactId>
+			<version>[1.0-SNAPSHOT, )</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projog</groupId>
+			<artifactId>projog-core</artifactId>
+			<version>0.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projog</groupId>
+			<artifactId>projog-clp</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projog</groupId>
+			<artifactId>projog-test</artifactId>
+			<version>0.5.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>[4.10, )</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.6</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-webdav-jackrabbit</artifactId>
+							<version>3.2.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<nohelp>true</nohelp>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<nohelp>true</nohelp>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pdf-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>site-pdf</id>
+						<phase>site</phase>
+						<goals>
+							<goal>pdf</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/docs</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/dist.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>create-archive</id>
+						<phase>site</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>
+								io.github.prolobjectlink.prolog.projog.ProjogConsole
+							</mainClass>
+						</manifest>
+						<manifestEntries>
+							<Built-By>Prolobjectlink Project</Built-By>
+						</manifestEntries>
+						<manifestSections>
+							<manifestSection>
+								<name>Prolobjectlink-JPI-Projog</name>
+								<manifestEntries>
+									<Specification-Title>Prolobjectlink-JPI-Projog Library</Specification-Title>
+									<Specification-Version>${project.version}</Specification-Version>
+									<Specification-Vendor>Prolobjectlink Project</Specification-Vendor>
+									<Implementation-Title>Prolobjectlink-JPI-Projog</Implementation-Title>
+									<Implementation-Version>${project.version}</Implementation-Version>
+									<Implementation-Vendor>Prolobjectlink Project</Implementation-Vendor>
+								</manifestEntries>
+							</manifestSection>
+						</manifestSections>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<!-- Creation of the bin file (bat and sh) -->
+				<!-- A filter property file must be created in src/build/filters and 
+					given for each execution -->
+				<executions>
+					<execution>
+						<!-- Create the bin for the XML Update Class -->
+						<id>createXmlUpdateBin</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/bin</outputDirectory>
+							<overwrite>true</overwrite>
+							<fileNameFiltering>true</fileNameFiltering>
+							<useBuildFilters>false</useBuildFilters>
+							<filters>
+								<filter>${project.basedir}/src/build/filters/bin.properties</filter>
+							</filters>
+							<resources>
+								<resource>
+									<filtering>true</filtering>
+									<directory>${project.basedir}/src/build/filters</directory>
+									<includes>
+										<include>*.bat</include>
+										<include>*.sh</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.17</version>
+				<configuration>
+					<canUpdateDescription>true</canUpdateDescription>
+					<failOnMissingHeader>true</failOnMissingHeader>
+					<acceptPomPackaging>true</acceptPomPackaging>
+					<licenseName>apache_v2</licenseName>
+					<!-- <dryRun>true</dryRun> -->
+					<licenseFile>LICENSE.md</licenseFile>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+					<roots>
+						<root>src/assembly</root>
+						<root>src/changes</root>
+						<root>src/main</root>
+						<root>src/test</root>
+						<root>src/site</root>
+					</roots>
+				</configuration>
+				<executions>
+					<execution>
+						<id>update-file-header</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>add-license</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>update-project-license</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>3.0.3</version>
+				<configuration>
+					<threshold>Normal</threshold>
+					<effort>Default</effort>
+					<excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<tags>
+						<tag>TODO</tag>
+						<tag>FIXME</tag>
+					</tags>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javancss-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>clirr-maven-plugin</artifactId>
+				<version>2.2.2</version>
+				<configuration>
+					<comparisonArtifacts>
+						<comparisonArtifact>
+							<groupId>commons-lang</groupId>
+							<artifactId>commons-lang</artifactId>
+							<version>2.6</version>
+						</comparisonArtifact>
+					</comparisonArtifacts>
+					<minSeverity>info</minSeverity>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.5.201505241946</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>target/jacoco.exec</dataFile>
+							<outputDirectory>target/jacoco-ut</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<systemPropertyVariables>
+						<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					<skipStaging>true</skipStaging>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+			</plugin>
+
+			<!--
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.3.7</version>
+				<configuration>
+					<instructions>
+						<Implementation-Title>${project.name}</Implementation-Title>
+						<Implementation-Version>${project.version}</Implementation-Version>
+						<Bundle-DocURL>${project.url}</Bundle-DocURL>
+						<Bundle-Name>Projog Java Prolog Interface Implementation</Bundle-Name>
+						<Export-Package>${project.groupId}.prolog.projog</Export-Package>
+						<Import-Package>javax.script;javax.tools;org.projog.tools;org.projog.clp;${project.groupId}.*;provide:=true</Import-Package>
+						<Bundle-SymbolicName>${project.groupId}.prolog.projog.plugin;singleton:=true</Bundle-SymbolicName>
+						<Bundle-RequiredExecutionEnvironment>JavaSE-1.7</Bundle-RequiredExecutionEnvironment>
+						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+						<Embed-Directory>target/dependency</Embed-Directory>
+						<Embed-StripGroup>true</Embed-StripGroup>
+						<Embed-Transitive>true</Embed-Transitive>
+					</instructions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>install</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			-->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>2.7.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<version>0.13</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludeSubProjects>false</excludeSubProjects>
+					<numUnapprovedLicenses>0</numUnapprovedLicenses>
+					<licenses>
+						<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+							<licenseFamilyCategory>LGPL2.1</licenseFamilyCategory>
+							<licenseFamilyName>GNU Lesser General Public License (LGPL) 2.1</licenseFamilyName>
+							<notes></notes>
+							<patterns>
+								<pattern>GNU Lesser General Public License</pattern>
+							</patterns>
+						</license>
+					</licenses>
+					<licenseFamilies>
+						<licenseFamily implementation="org.apache.rat.license.GPL2LicenseFamily">
+							<familyName>GNU Lesser General Public License (LGPL) 2.1</familyName>
+						</licenseFamily>
+					</licenseFamilies>
+					<excludes>
+						generated content
+						<exclude>**/.*/**</exclude>
+						<exclude>**/target/**/*</exclude>
+					</excludes>
+					<includes>
+						only check common source files
+						<include>**/src/**/*.apt</include>
+						<include>**/src/**/*.bat</include>
+						<include>**/src/**/*.css</include>
+						<include>**/src/**/*.html</include>
+						<include>**/src/**/*.java</include>
+						<include>**/src/**/*.js</include>
+						<include>**/src/**/*.jsp</include>
+						<include>**/src/**/*.properties</include>
+						<include>**/src/**/*.sh</include>
+						<include>**/src/**/*.txt</include>
+						<include>**/src/**/*.vm</include>
+						<include>**/src/**/*.xml</include>
+					</includes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>5.0.3</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<mavenHome>../apache-maven</mavenHome>
+					<goals>deploy -P release</goals>
+					<preparationGoals>clean install site</preparationGoals>
+					<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
+					<tagNameFormat>v-@{project.version}</tagNameFormat>
+					<useReleaseProfile>false</useReleaseProfile>
+					<remoteTagging>false</remoteTagging>
+				</configuration>
+			</plugin>
+
+			<!--
+			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>0.15.3</version>
+				<configuration>
+					<oldVersion>
+						<dependency>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<version>1.0</version>
+							<type>jar</type>
+						</dependency>
+					</oldVersion>
+					<newVersion>
+						<file>
+							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+						</file>
+					</newVersion>
+					<parameter>
+						<htmlTitle>Changelog API</htmlTitle>
+					</parameter>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>cmp</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			-->
+
+		</plugins>
+	</build>
+
+	<reporting>
+		<excludeDefaults>true</excludeDefaults>
+		<outputDirectory>${project.basedir}/docs</outputDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>summary</report>
+							<report>index</report>
+							<report>dependencies</report>
+							<report>project-team</report>
+							<report>license</report>
+							<report>scm</report>
+							<report>cim</report>
+							<report>mailing-list</report>
+							<report>issue-tracking</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+				</configuration>
+			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>findbugs-maven-plugin</artifactId> -->
+			<!-- <version>3.0.3</version> -->
+			<!-- </plugin> -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<targetJdk>1.5</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.5.201505241946</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>2.11</version>
+				<configuration>
+					<issueLinkTemplate>%URL%/show_bug.cgi?id=%ISSUE%</issueLinkTemplate>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>changes-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<tags>
+						<tag>TODO</tag>
+						<tag>FIXME</tag>
+					</tags>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javancss-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>clirr-maven-plugin</artifactId>
+				<version>2.2.2</version>
+				<configuration>
+					<comparisonArtifacts>
+						<comparisonArtifact>
+							<groupId>commons-lang</groupId>
+							<artifactId>commons-lang</artifactId>
+							<version>2.6</version>
+						</comparisonArtifact>
+					</comparisonArtifacts>
+					<minSeverity>info</minSeverity>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.18.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.2</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependency-updates-report</report>
+							<report>plugin-updates-report</report>
+							<report>property-updates-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<!-- <plugin> -->
+			<!-- <artifactId>maven-changelog-plugin</artifactId> -->
+			<!-- <version>2.2</version> -->
+			<!-- <reportSets> -->
+			<!-- <reportSet> -->
+			<!-- <id>dual-report</id> -->
+			<!-- <configuration> -->
+			<!-- <type>range</type> -->
+			<!-- <range>30</range> -->
+			<!-- </configuration> -->
+			<!-- <reports> -->
+			<!-- <report>changelog</report> -->
+			<!-- <report>file-activity</report> -->
+			<!-- <report>dev-activity</report> -->
+			<!-- </reports> -->
+			<!-- </reportSet> -->
+			<!-- </reportSets> -->
+			<!-- </plugin> -->
+
+			<!--
+			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>0.15.3</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>cmp-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+				<configuration>
+					<oldVersion>
+						<dependency>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<version>1.0</version>
+							<type>jar</type>
+						</dependency>
+					</oldVersion>
+					<newVersion>
+						<file>
+							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+						</file>
+					</newVersion>
+					<parameter>
+						<htmlTitle>Changelog API</htmlTitle>
+					</parameter>
+				</configuration>
+			</plugin>
+			-->
+
+		</plugins>
+	</reporting>
+
+</project>

@@ -1,0 +1,49 @@
+~~~
+~~ #%L
+~~ prolobjectlink-jpi-tuprolog
+~~ %%
+~~ Copyright (C) 2019 Prolobjectlink Project
+~~ %%
+~~ This program is free software: you can redistribute it and/or modify
+~~ it under the terms of the GNU Lesser General Public License as
+~~ published by the Free Software Foundation, either version 2.1 of the
+~~ License, or (at your option) any later version.
+~~ 
+~~ This program is distributed in the hope that it will be useful,
+~~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+~~ GNU General Lesser Public License for more details.
+~~ 
+~~ You should have received a copy of the GNU General Lesser Public
+~~ License along with this program.  If not, see
+~~ <http://www.gnu.org/licenses/lgpl-2.1.html>.
+~~ #L%
+~~~
+ ------
+ Title
+ ------
+ Jose Zalacain
+ ------
+ 2019-03-31
+ ------
+
+Prolog Programming
+ 
+* Prolog Language
+ 
+ 	The Prolog belongs to the declarative programming languages paradigm. the Prolog
+ 	programs are based on valid conclusion over facts. Prolog is a LP 
+ 	language specially indicated to modeling problems that imply objects and relations
+ 	among objects. Prolog have simple syntax, is weakness typed, have simples data 
+ 	structures, support recursion and is extensible. One Prolog program have two basic
+ 	components or clause, facts and rules.
+ 	
+ 	All Prolog programs are a succession of clauses where every clause end with dot 
+ 	character. They are two kind of clauses, Facts and Rules. Every Prolog clause have
+ 	two components, one head and one body. Facts are the case where the clause only have
+ 	head component but don't have body and they are used to indicate things unconditionally
+ 	true about some domain. Rule have head and body and both are separate by neck operator
+ 	(:-). Rules are used to indicate things conditionally true about some domain. Neck
+ 	operator semantic denote that one condition should be satisfy by the clause head to be
+ 	true. The clause body specify the condition order to verify for the conclusion or head.
+ 	

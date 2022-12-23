@@ -1,0 +1,47 @@
+~~~
+~~ #%L
+~~ prolobjectlink-jpi-projog
+~~ %%
+~~ Copyright (C) 2019 Prolobjectlink Project
+~~ %%
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~ #L%
+~~~
+ ------
+ Title
+ ------
+ Jose Zalacain
+ ------
+ 2019-03-31
+ ------
+
+Prolog Programming
+ 
+* Prolog Language
+ 
+ 	The Prolog belongs to the declarative programming languages paradigm. the Prolog
+ 	programs are based on valid conclusion over facts. Prolog is a LP 
+ 	language specially indicated to modeling problems that imply objects and relations
+ 	among objects. Prolog have simple syntax, is weakness typed, have simples data 
+ 	structures, support recursion and is extensible. One Prolog program have two basic
+ 	components or clause, facts and rules.
+ 	
+ 	All Prolog programs are a succession of clauses where every clause end with dot 
+ 	character. They are two kind of clauses, Facts and Rules. Every Prolog clause have
+ 	two components, one head and one body. Facts are the case where the clause only have
+ 	head component but don't have body and they are used to indicate things unconditionally
+ 	true about some domain. Rule have head and body and both are separate by neck operator
+ 	(:-). Rules are used to indicate things conditionally true about some domain. Neck
+ 	operator semantic denote that one condition should be satisfy by the clause head to be
+ 	true. The clause body specify the condition order to verify for the conclusion or head.
+ 	

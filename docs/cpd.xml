@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="48" tokens="179">
+<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogInteger.java"/>
+<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogLong.java"/>
+<codefragment>
+<![CDATA[
+		super(LONG_TYPE, provider, new IntegerNumber(value.longValue()));
+	}
+
+	public PrologInteger getPrologInteger() {
+		return new ProjogInteger(provider, getIntegerValue());
+	}
+
+	public PrologFloat getPrologFloat() {
+		return new ProjogFloat(provider, getFloatValue());
+	}
+
+	public PrologDouble getPrologDouble() {
+		return new ProjogDouble(provider, getDoubleValue());
+	}
+
+	public PrologLong getPrologLong() {
+		return new ProjogLong(provider, getLongValue());
+	}
+
+	public long getLongValue() {
+		return ((IntegerNumber) value).getLong();
+	}
+
+	public double getDoubleValue() {
+		return ((IntegerNumber) value).getDouble();
+	}
+
+	public int getIntegerValue() {
+		return (int) getLongValue();
+	}
+
+	public float getFloatValue() {
+		return (float) getDoubleValue();
+	}
+
+	public PrologTerm[] getArguments() {
+		return new ProjogTerm[0];
+	}
+
+	public int getArity() {
+		throw new ArityError(this);
+	}
+
+	public String getFunctor() {
+		throw new FunctorError(this);
+	}
+
+}
+]]>
+</codefragment>
+</duplication>
+<duplication lines="38" tokens="152">
+<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogDouble.java"/>
+<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogFloat.java"/>
+<codefragment>
+<![CDATA[
+		super(FLOAT_TYPE, provider, new DecimalFraction(value.floatValue()));
+	}
+
+	public PrologInteger getPrologInteger() {
+		return new ProjogInteger(provider, getIntegerValue());
+	}
+
+	public PrologFloat getPrologFloat() {
+		return new ProjogFloat(provider, getFloatValue());
+	}
+
+	public PrologDouble getPrologDouble() {
+		return new ProjogDouble(provider, getDoubleValue());
+	}
+
+	public PrologLong getPrologLong() {
+		return new ProjogLong(provider, getLongValue());
+	}
+
+	public long getLongValue() {
+		return ((DecimalFraction) value).getLong();
+	}
+
+	public double getDoubleValue() {
+		return ((DecimalFraction) value).getDouble();
+	}
+
+	public int getIntegerValue() {
+		return (int) getLongValue();
+	}
+
+	public float getFloatValue() {
+		return (float) getDoubleValue();
+	}
+
+	public PrologTerm[] getArguments() {
+		return new ProjogTerm[0];
+	}
+]]>
+</codefragment>
+</duplication>
+<duplication lines="10" tokens="101">
+<file line="103" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="330" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<codefragment>
+<![CDATA[
+		Collection<PrologClause> cls = new LinkedList<PrologClause>();
+		Map<PredicateKey, UserDefinedPredicateFactory> m = projog.getKnowledgeBase().getPredicates()
+				.getUserDefinedPredicates();
+		for (Map.Entry<PredicateKey, UserDefinedPredicateFactory> entry : m.entrySet()) {
+			UserDefinedPredicateFactory val = entry.getValue();
+			Iterator<ClauseModel> i = val.getImplications();
+			while (i.hasNext()) {
+				ClauseModel clause = i.next();
+				if (clause.isFact()) {
+					PrologTerm head = toTerm(clause.getConsequent(), PrologTerm.class);
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>
