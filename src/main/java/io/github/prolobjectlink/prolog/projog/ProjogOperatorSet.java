@@ -20,10 +20,16 @@
 package io.github.prolobjectlink.prolog.projog;
 
 import java.util.AbstractSet;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
+import org.projog.api.Projog;
 import org.projog.core.parser.Operands;
+import org.projog.core.predicate.PredicateKey;
 
+import io.github.prolobjectlink.prolog.AbstractOperator;
 import io.github.prolobjectlink.prolog.PrologOperator;
 import io.github.prolobjectlink.prolog.PrologOperatorSet;
 
@@ -34,25 +40,66 @@ import io.github.prolobjectlink.prolog.PrologOperatorSet;
  */
 final class ProjogOperatorSet extends AbstractSet<PrologOperator> implements PrologOperatorSet {
 
-	private final Operands operands = new Operands();
+	private Set<PrologOperator> operators = new HashSet<PrologOperator>();
+	private Operands ops = new Operands();
 
 	public ProjogOperatorSet() {
+		org.projog.api.Projog projog = new Projog();
+		ops = projog.getKnowledgeBase().getOperands();
+		Set<PredicateKey> ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();
+		for (PredicateKey predicateKey : ps) {
+			String name = predicateKey.getName();
+			if (ops.isDefined(name)) {
+				Object prefix = ops.prefix(name) ? ops.getPrefixPriority(name) : null;
+				Object infix = ops.infix(name) ? ops.getInfixPriority(name) : null;
+				Object postfix = ops.postfix(name) ? ops.getPostfixPriority(name) : null;
+				int priority = prefix != null ? (int) prefix
+						: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));
+				String specifier = ops.fx(name) ? "fx"
+						: (ops.fy(name) ? "fy"
+								: (ops.xf(name) ? "xf"
+										: (ops.yf(name) ? "yf"
+												: (ops.xfx(name) ? "xfx"
+														: (ops.xfy(name) ? "xfy"
+																: (ops.yfx(name) ? "yfx" : ("unknow")))))));
+				AbstractOperator operator = new ProjogOperator(priority, specifier, name);
+				operators.add(operator);
+			}
+		}
 	}
 
 	public boolean currentOp(String opreator) {
-		return operands.isDefined(opreator);
+		return ops.isDefined(opreator);
 	}
 
 	@Override
 	public Iterator<PrologOperator> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return operators.iterator();
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return operators.size();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(operators);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjogOperatorSet other = (ProjogOperatorSet) obj;
+		return Objects.equals(operators, other.operators);
 	}
 
 }

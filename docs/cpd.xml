@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
+<duplication lines="21" tokens="239">
+<file line="304" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="48" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogOperatorSet.java"/>
+<codefragment>
+<![CDATA[
+		ops = projog.getKnowledgeBase().getOperands();
+		Set<PredicateKey> ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();
+		for (PredicateKey predicateKey : ps) {
+			String name = predicateKey.getName();
+			if (ops.isDefined(name)) {
+				Object prefix = ops.prefix(name) ? ops.getPrefixPriority(name) : null;
+				Object infix = ops.infix(name) ? ops.getInfixPriority(name) : null;
+				Object postfix = ops.postfix(name) ? ops.getPostfixPriority(name) : null;
+				int priority = prefix != null ? (int) prefix
+						: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));
+				String specifier = ops.fx(name) ? "fx"
+						: (ops.fy(name) ? "fy"
+								: (ops.xf(name) ? "xf"
+										: (ops.yf(name) ? "yf"
+												: (ops.xfx(name) ? "xfx"
+														: (ops.xfy(name) ? "xfy"
+																: (ops.yfx(name) ? "yfx" : ("unknow")))))));
+				AbstractOperator operator = new ProjogOperator(priority, specifier, name);
+				operators.add(operator);
+			}
+		}
+]]>
+</codefragment>
+</duplication>
 <duplication lines="48" tokens="179">
 <file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogInteger.java"/>
 <file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogLong.java"/>

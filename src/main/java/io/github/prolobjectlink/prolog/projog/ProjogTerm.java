@@ -22,10 +22,9 @@ package io.github.prolobjectlink.prolog.projog;
 import static io.github.prolobjectlink.prolog.AbstractConverter.SIMPLE_ATOM_REGEX;
 import static io.github.prolobjectlink.prolog.PrologTermType.OBJECT_TYPE;
 
-import org.projog.api.Projog;
-import org.projog.api.QueryResult;
 import org.projog.core.parser.Operands;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermComparator;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
@@ -102,8 +101,11 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 	}
 
 	public final boolean isEvaluable() {
-		Operands operands = new Operands();
-		return operands.isDefined(getFunctor());
+		if (!isNumber() && !isVariable()) {
+			Operands operands = new Operands();
+			return operands.isDefined(getFunctor());
+		}
+		return false;
 	}
 
 	public final boolean isTrueType() {
@@ -152,22 +154,10 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 	}
 
 	// NOTE: projog not compare numbers by value
-	public final int compareTo(PrologTerm o) {
-		String key = "Order";
-		org.projog.api.Projog p = new Projog();
-		Term term = fromTerm(o, Term.class);
-		String arguments = key + "," + value + "," + term;
-		QueryResult query = p.executeQuery("compare(" + arguments + ").");
-		/* boolean evaluation= */query.next();
-		Term order = query.getTerm(key);
-
-		if (order.getName().equals("<") && order.getNumberOfArguments() == 0) {
-			return -1;
-		} else if (order.getName().equals(">") && order.getNumberOfArguments() == 0) {
-			return 1;
-		}
-
-		return 0;
+	public final int compareTo(PrologTerm term) {
+		Term t = fromTerm(term, Term.class);
+		int r = TermComparator.TERM_COMPARATOR.compare(value, t);
+		return r < 0 ? -1 : (r > 0 ? 1 : 0);
 	}
 
 	@Override
