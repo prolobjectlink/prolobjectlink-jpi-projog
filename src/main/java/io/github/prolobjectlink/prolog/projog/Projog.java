@@ -23,7 +23,6 @@ import static io.github.prolobjectlink.prolog.AbstractConverter.SIMPLE_ATOM_REGE
 
 import java.util.Map;
 
-import org.projog.core.parser.Operands;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Term;
 
@@ -63,9 +62,12 @@ public class Projog extends AbstractProvider implements PrologProvider {
 	}
 
 	public PrologTerm parseTerm(String term) {
-		return toTerm(SentenceParser.getInstance(term, new Operands()).parseTerm(), PrologTerm.class);
-//		return toTerm(SentenceParser.getInstance(term, new org.projog.api.Projog().getKnowledgeBase().getOperands())
-//				.parseTerm(), PrologTerm.class);
+		return term.endsWith(".")
+				? toTerm(SentenceParser.getInstance(term, new org.projog.api.Projog().getKnowledgeBase().getOperands())
+						.parseTerm(), PrologTerm.class)
+				: toTerm(SentenceParser
+						.getInstance(term + ".", new org.projog.api.Projog().getKnowledgeBase().getOperands())
+						.parseTerm(), PrologTerm.class);
 	}
 
 	public PrologTerm[] parseTerms(String stringTerms) {

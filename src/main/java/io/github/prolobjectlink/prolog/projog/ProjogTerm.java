@@ -20,6 +20,8 @@
 package io.github.prolobjectlink.prolog.projog;
 
 import static io.github.prolobjectlink.prolog.AbstractConverter.SIMPLE_ATOM_REGEX;
+import static io.github.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
 import static io.github.prolobjectlink.prolog.PrologTermType.OBJECT_TYPE;
 
 import org.projog.core.parser.Operands;
@@ -54,7 +56,7 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 	}
 
 	public final boolean isFloat() {
-		return value.getType() == TermType.FRACTION;
+		return type == FLOAT_TYPE;
 	}
 
 	public final boolean isInteger() {
@@ -66,7 +68,7 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 	}
 
 	public final boolean isLong() {
-		return value.getType() == TermType.INTEGER;
+		return type == LONG_TYPE;
 	}
 
 	public final boolean isVariable() {

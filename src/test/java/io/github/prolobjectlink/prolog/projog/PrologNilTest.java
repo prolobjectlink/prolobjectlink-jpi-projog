@@ -232,7 +232,6 @@ public class PrologNilTest extends PrologBaseTest {
 
 		// with expression
 		PrologTerm expression = provider.parseTerm("58+93*10");
-		System.out.println(expression);
 		assertEquals(-1, empty.compareTo(expression));
 
 	}

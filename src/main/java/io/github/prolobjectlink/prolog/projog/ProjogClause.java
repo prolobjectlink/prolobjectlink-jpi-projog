@@ -19,6 +19,8 @@
  */
 package io.github.prolobjectlink.prolog.projog;
 
+import java.util.Objects;
+
 import io.github.prolobjectlink.prolog.AbstractClause;
 import io.github.prolobjectlink.prolog.PrologClause;
 import io.github.prolobjectlink.prolog.PrologIndicator;
@@ -47,6 +49,26 @@ final class ProjogClause extends AbstractClause implements PrologClause {
 
 	public PrologIndicator getPrologIndicator() {
 		return indicator;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(indicator);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjogClause other = (ProjogClause) obj;
+		return Objects.equals(indicator, other.indicator);
 	}
 
 }

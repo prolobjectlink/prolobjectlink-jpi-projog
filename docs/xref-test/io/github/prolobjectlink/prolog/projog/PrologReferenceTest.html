@@ -349,7 +349,7 @@
 <a class="jxr_linenumber" name="339" href="#339">339</a> 		PrologTerm empty = provider.prologEmpty();
 <a class="jxr_linenumber" name="340" href="#340">340</a> 		assertEquals(-1, ref.compareTo(flattenList));
 <a class="jxr_linenumber" name="341" href="#341">341</a> 		assertEquals(-1, ref.compareTo(headTailList));
-<a class="jxr_linenumber" name="342" href="#342">342</a> 		assertEquals(-1, ref.compareTo(empty));
+<a class="jxr_linenumber" name="342" href="#342">342</a> 		assertEquals(1, ref.compareTo(empty));
 <a class="jxr_linenumber" name="343" href="#343">343</a> 
 <a class="jxr_linenumber" name="344" href="#344">344</a> 		<em class="jxr_comment">// with expression</em>
 <a class="jxr_linenumber" name="345" href="#345">345</a> 		PrologTerm expression = provider.parseTerm(<span class="jxr_string">"58+93*10"</span>);

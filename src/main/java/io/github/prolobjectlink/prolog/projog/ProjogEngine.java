@@ -66,6 +66,7 @@ import io.github.prolobjectlink.prolog.PrologTerm;
 public class ProjogEngine extends AbstractEngine implements PrologEngine {
 
 	final org.projog.api.Projog projog = new org.projog.api.Projog();
+	final Set<String> userOperators = new HashSet<String>();
 	private static final Term BODY = new Atom("true");
 
 	protected ProjogEngine(PrologProvider provider) {
@@ -191,11 +192,14 @@ public class ProjogEngine extends AbstractEngine implements PrologEngine {
 
 	@Override
 	public boolean clause(PrologTerm term) {
+		Term h = null;
 		Term b = BODY;
-		Term h = fromTerm(term, Term.class);
+		Term c = fromTerm(term, Term.class);
 		if (term.hasIndicator(":-", 2)) {
-			h = h.getArgument(0);
-			b = h.getArgument(1);
+			h = c.getArgument(0);
+			b = c.getArgument(1);
+		} else {
+			h = c;
 		}
 		return projog.executeQuery("clause(" + h + "," + b + ").").next();
 	}
@@ -265,6 +269,7 @@ public class ProjogEngine extends AbstractEngine implements PrologEngine {
 	@Override
 	public void operator(int priority, String specifier, String operator) {
 		projog.executeOnce("op(" + priority + "," + specifier + ", '" + operator + "').");
+		userOperators.add(operator);
 	}
 
 	@Override
@@ -319,6 +324,24 @@ public class ProjogEngine extends AbstractEngine implements PrologEngine {
 														: (ops.xfy(name) ? "xfy"
 																: (ops.yfx(name) ? "yfx" : ("unknow")))))));
 				AbstractOperator operator = new ProjogOperator(priority, specifier, name);
+				operators.add(operator);
+			}
+		}
+		for (String string : userOperators) {
+			if (ops.isDefined(string)) {
+				Object prefix = ops.prefix(string) ? ops.getPrefixPriority(string) : null;
+				Object infix = ops.infix(string) ? ops.getInfixPriority(string) : null;
+				Object postfix = ops.postfix(string) ? ops.getPostfixPriority(string) : null;
+				int priority = prefix != null ? (int) prefix
+						: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));
+				String specifier = ops.fx(string) ? "fx"
+						: (ops.fy(string) ? "fy"
+								: (ops.xf(string) ? "xf"
+										: (ops.yf(string) ? "yf"
+												: (ops.xfx(string) ? "xfx"
+														: (ops.xfy(string) ? "xfy"
+																: (ops.yfx(string) ? "yfx" : ("unknow")))))));
+				AbstractOperator operator = new ProjogOperator(priority, specifier, string);
 				operators.add(operator);
 			}
 		}

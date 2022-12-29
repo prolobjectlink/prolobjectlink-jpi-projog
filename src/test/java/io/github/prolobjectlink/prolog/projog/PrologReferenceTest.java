@@ -339,7 +339,7 @@ public class PrologReferenceTest extends PrologBaseTest {
 		PrologTerm empty = provider.prologEmpty();
 		assertEquals(-1, ref.compareTo(flattenList));
 		assertEquals(-1, ref.compareTo(headTailList));
-		assertEquals(-1, ref.compareTo(empty));
+		assertEquals(1, ref.compareTo(empty));
 
 		// with expression
 		PrologTerm expression = provider.parseTerm("58+93*10");

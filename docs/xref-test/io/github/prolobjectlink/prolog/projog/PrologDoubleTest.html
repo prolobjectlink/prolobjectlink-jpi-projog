@@ -266,40 +266,42 @@
 <a class="jxr_linenumber" name="256" href="#256">256</a> 
 <a class="jxr_linenumber" name="257" href="#257">257</a> 		<em class="jxr_comment">// with long</em>
 <a class="jxr_linenumber" name="258" href="#258">258</a> 		PrologLong lValue = provider.newLong(28);
-<a class="jxr_linenumber" name="259" href="#259">259</a> 		assertEquals(1, dValue.compareTo(lValue));
-<a class="jxr_linenumber" name="260" href="#260">260</a> 
-<a class="jxr_linenumber" name="261" href="#261">261</a> 		<em class="jxr_comment">// with float</em>
-<a class="jxr_linenumber" name="262" href="#262">262</a> 		PrologFloat fValue1 = provider.newFloat(100.98);
-<a class="jxr_linenumber" name="263" href="#263">263</a> 		<em class="jxr_comment">// false because are different</em>
-<a class="jxr_linenumber" name="264" href="#264">264</a> 		assertEquals(-1, dValue.compareTo(fValue1));
-<a class="jxr_linenumber" name="265" href="#265">265</a> 
-<a class="jxr_linenumber" name="266" href="#266">266</a> 		<em class="jxr_comment">// with float</em>
-<a class="jxr_linenumber" name="267" href="#267">267</a> 		PrologDouble dValue1 = provider.newDouble(100.98);
-<a class="jxr_linenumber" name="268" href="#268">268</a> 		<em class="jxr_comment">// true because are equals</em>
-<a class="jxr_linenumber" name="269" href="#269">269</a> 		assertEquals(0, dValue.compareTo(dValue));
-<a class="jxr_linenumber" name="270" href="#270">270</a> 		<em class="jxr_comment">// false because are different</em>
-<a class="jxr_linenumber" name="271" href="#271">271</a> 		assertEquals(-1, dValue.compareTo(dValue1));
-<a class="jxr_linenumber" name="272" href="#272">272</a> 
-<a class="jxr_linenumber" name="273" href="#273">273</a> 		<em class="jxr_comment">// with variable</em>
-<a class="jxr_linenumber" name="274" href="#274">274</a> 		PrologVariable variable = provider.newVariable(<span class="jxr_string">"X"</span>, 0);
-<a class="jxr_linenumber" name="275" href="#275">275</a> 		<em class="jxr_comment">// true. case float and variable</em>
-<a class="jxr_linenumber" name="276" href="#276">276</a> 		assertEquals(1, dValue.compareTo(variable));
-<a class="jxr_linenumber" name="277" href="#277">277</a> 
-<a class="jxr_linenumber" name="278" href="#278">278</a> 		<em class="jxr_comment">// with predicate</em>
-<a class="jxr_linenumber" name="279" href="#279">279</a> 		PrologStructure structure = provider.parseStructure(<span class="jxr_string">"some_predicate(a,b,c)"</span>);
-<a class="jxr_linenumber" name="280" href="#280">280</a> 		assertEquals(-1, dValue.compareTo(structure));
-<a class="jxr_linenumber" name="281" href="#281">281</a> 
-<a class="jxr_linenumber" name="282" href="#282">282</a> 		<em class="jxr_comment">// with list</em>
-<a class="jxr_linenumber" name="283" href="#283">283</a> 		PrologList flattenedList = provider.parseList(<span class="jxr_string">"[a,b,c]"</span>);
-<a class="jxr_linenumber" name="284" href="#284">284</a> 		assertEquals(-1, dValue.compareTo(flattenedList));
-<a class="jxr_linenumber" name="285" href="#285">285</a> 
-<a class="jxr_linenumber" name="286" href="#286">286</a> 		<em class="jxr_comment">// with expression</em>
-<a class="jxr_linenumber" name="287" href="#287">287</a> 		PrologTerm expression = provider.parseTerm(<span class="jxr_string">"58+93*10"</span>);
-<a class="jxr_linenumber" name="288" href="#288">288</a> 		assertEquals(-1, dValue.compareTo(expression));
-<a class="jxr_linenumber" name="289" href="#289">289</a> 
-<a class="jxr_linenumber" name="290" href="#290">290</a> 	}
+<a class="jxr_linenumber" name="259" href="#259">259</a> <em class="jxr_comment">//		assertEquals(1, dValue.compareTo(lValue));</em>
+<a class="jxr_linenumber" name="260" href="#260">260</a> 		<em class="jxr_comment">// NOTE: projog not compare numbers by value</em>
+<a class="jxr_linenumber" name="261" href="#261">261</a> 		assertEquals(-1, dValue.compareTo(lValue));
+<a class="jxr_linenumber" name="262" href="#262">262</a> 
+<a class="jxr_linenumber" name="263" href="#263">263</a> 		<em class="jxr_comment">// with float</em>
+<a class="jxr_linenumber" name="264" href="#264">264</a> 		PrologFloat fValue1 = provider.newFloat(100.98);
+<a class="jxr_linenumber" name="265" href="#265">265</a> 		<em class="jxr_comment">// false because are different</em>
+<a class="jxr_linenumber" name="266" href="#266">266</a> 		assertEquals(-1, dValue.compareTo(fValue1));
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a> 		<em class="jxr_comment">// with float</em>
+<a class="jxr_linenumber" name="269" href="#269">269</a> 		PrologDouble dValue1 = provider.newDouble(100.98);
+<a class="jxr_linenumber" name="270" href="#270">270</a> 		<em class="jxr_comment">// true because are equals</em>
+<a class="jxr_linenumber" name="271" href="#271">271</a> 		assertEquals(0, dValue.compareTo(dValue));
+<a class="jxr_linenumber" name="272" href="#272">272</a> 		<em class="jxr_comment">// false because are different</em>
+<a class="jxr_linenumber" name="273" href="#273">273</a> 		assertEquals(-1, dValue.compareTo(dValue1));
+<a class="jxr_linenumber" name="274" href="#274">274</a> 
+<a class="jxr_linenumber" name="275" href="#275">275</a> 		<em class="jxr_comment">// with variable</em>
+<a class="jxr_linenumber" name="276" href="#276">276</a> 		PrologVariable variable = provider.newVariable(<span class="jxr_string">"X"</span>, 0);
+<a class="jxr_linenumber" name="277" href="#277">277</a> 		<em class="jxr_comment">// true. case float and variable</em>
+<a class="jxr_linenumber" name="278" href="#278">278</a> 		assertEquals(1, dValue.compareTo(variable));
+<a class="jxr_linenumber" name="279" href="#279">279</a> 
+<a class="jxr_linenumber" name="280" href="#280">280</a> 		<em class="jxr_comment">// with predicate</em>
+<a class="jxr_linenumber" name="281" href="#281">281</a> 		PrologStructure structure = provider.parseStructure(<span class="jxr_string">"some_predicate(a,b,c)"</span>);
+<a class="jxr_linenumber" name="282" href="#282">282</a> 		assertEquals(-1, dValue.compareTo(structure));
+<a class="jxr_linenumber" name="283" href="#283">283</a> 
+<a class="jxr_linenumber" name="284" href="#284">284</a> 		<em class="jxr_comment">// with list</em>
+<a class="jxr_linenumber" name="285" href="#285">285</a> 		PrologList flattenedList = provider.parseList(<span class="jxr_string">"[a,b,c]"</span>);
+<a class="jxr_linenumber" name="286" href="#286">286</a> 		assertEquals(-1, dValue.compareTo(flattenedList));
+<a class="jxr_linenumber" name="287" href="#287">287</a> 
+<a class="jxr_linenumber" name="288" href="#288">288</a> 		<em class="jxr_comment">// with expression</em>
+<a class="jxr_linenumber" name="289" href="#289">289</a> 		PrologTerm expression = provider.parseTerm(<span class="jxr_string">"58+93*10"</span>);
+<a class="jxr_linenumber" name="290" href="#290">290</a> 		assertEquals(-1, dValue.compareTo(expression));
 <a class="jxr_linenumber" name="291" href="#291">291</a> 
-<a class="jxr_linenumber" name="292" href="#292">292</a> }
+<a class="jxr_linenumber" name="292" href="#292">292</a> 	}
+<a class="jxr_linenumber" name="293" href="#293">293</a> 
+<a class="jxr_linenumber" name="294" href="#294">294</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

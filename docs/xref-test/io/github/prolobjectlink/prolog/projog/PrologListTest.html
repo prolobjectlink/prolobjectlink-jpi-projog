@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="259" href="#259">259</a> 		PrologAtom atom = provider.newAtom(<span class="jxr_string">"John Doe"</span>);
 <a class="jxr_linenumber" name="260" href="#260">260</a> 		assertEquals(1, flattened.compareTo(atom));
 <a class="jxr_linenumber" name="261" href="#261">261</a> 		assertEquals(1, headTail.compareTo(atom));
-<a class="jxr_linenumber" name="262" href="#262">262</a> 		assertEquals(1, empty.compareTo(atom));
+<a class="jxr_linenumber" name="262" href="#262">262</a> 		assertEquals(-1, empty.compareTo(atom));
 <a class="jxr_linenumber" name="263" href="#263">263</a> 
 <a class="jxr_linenumber" name="264" href="#264">264</a> 		<em class="jxr_comment">// with integer</em>
 <a class="jxr_linenumber" name="265" href="#265">265</a> 		PrologInteger iValue = provider.newInteger(28);
