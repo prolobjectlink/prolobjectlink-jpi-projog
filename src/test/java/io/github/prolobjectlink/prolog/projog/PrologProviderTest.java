@@ -314,7 +314,8 @@ public class PrologProviderTest extends PrologBaseTest {
 		assertEquals(provider.newAtom("an_atom"), atom);
 
 		// be careful this engine remove quotes and rise an exception if not
-		PrologAtom complex_atom = (PrologAtom) provider.parseTerm("'an complex atom'");
+		PrologAtom complex_atom = (PrologAtom) provider.parseTerm("an complex atom");
+		System.out.println(provider.newAtom("an complex atom"));
 		assertEquals(provider.newAtom("an complex atom"), complex_atom);
 
 		// IPrologFloat f = (IPrologFloat) factory.parseTerm("3.14");

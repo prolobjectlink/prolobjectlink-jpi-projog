@@ -19,8 +19,6 @@
  */
 package io.github.prolobjectlink.prolog.projog;
 
-import static io.github.prolobjectlink.prolog.AbstractConverter.SIMPLE_ATOM_REGEX;
-
 import java.util.Map;
 
 import org.projog.core.parser.SentenceParser;
@@ -114,9 +112,6 @@ public class Projog extends AbstractProvider implements PrologProvider {
 	}
 
 	public PrologAtom newAtom(String functor) {
-		if (!functor.matches(SIMPLE_ATOM_REGEX)) {
-			return new ProjogAtom(this, "''" + functor + "''");
-		}
 		return new ProjogAtom(this, functor);
 	}
 

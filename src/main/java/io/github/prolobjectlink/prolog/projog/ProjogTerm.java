@@ -192,15 +192,6 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 
 	@Override
 	public String toString() {
-		if (isAtom()) {
-			String f = getFunctor();
-			int length = f.length();
-			if (!f.matches(SIMPLE_ATOM_REGEX)) {
-				if (f.startsWith("'") && f.endsWith("'")) {
-					return f.substring(1, length - 1);
-				}
-			}
-		}
 		return "" + value + "";
 	}
 
