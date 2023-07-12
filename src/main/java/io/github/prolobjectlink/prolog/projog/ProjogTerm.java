@@ -19,7 +19,6 @@
  */
 package io.github.prolobjectlink.prolog.projog;
 
-import static io.github.prolobjectlink.prolog.AbstractConverter.SIMPLE_ATOM_REGEX;
 import static io.github.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
 import static io.github.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
 import static io.github.prolobjectlink.prolog.PrologTermType.OBJECT_TYPE;
@@ -157,7 +156,7 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 
 	// NOTE: projog not compare numbers by value
 	public final int compareTo(PrologTerm term) {
-		Term t = fromTerm(term, Term.class);
+		Term t = ((ProjogTerm) term).value;
 		int r = TermComparator.TERM_COMPARATOR.compare(value, t);
 		return r < 0 ? -1 : (r > 0 ? 1 : 0);
 	}

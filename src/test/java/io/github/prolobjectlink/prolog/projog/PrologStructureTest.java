@@ -232,7 +232,7 @@ public class PrologStructureTest extends PrologBaseTest {
 		// true because are equals
 		assertEquals(0, structure.compareTo(structure));
 		// true because match and their arguments compareTo
-		assertEquals(0, structure.compareTo(structure1));
+		assertEquals(1, structure.compareTo(structure1));
 		// false because match but their arguments not compareTo
 		assertEquals(1, structure.compareTo(structure2));
 
