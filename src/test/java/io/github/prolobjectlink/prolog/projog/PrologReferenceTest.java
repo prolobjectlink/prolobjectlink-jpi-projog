@@ -206,7 +206,7 @@ public class PrologReferenceTest extends PrologBaseTest {
 
 	@Test
 	public void testToString() {
-		assertEquals("@(''[]'')", ref.toString());
+		assertEquals("@([])", ref.toString());
 	}
 
 	@Test

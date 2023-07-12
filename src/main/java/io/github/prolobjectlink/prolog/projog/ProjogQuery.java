@@ -207,9 +207,13 @@ final class ProjogQuery extends AbstractQuery implements PrologQuery {
 	@Override
 	public List<Map<String, PrologTerm>> all() {
 		List<Map<String, PrologTerm>> allVariables = new ArrayList<Map<String, PrologTerm>>();
-		while (queryResult.next()) {
-			Map<String, PrologTerm> vars = oneVariablesSolution();
+		while (next) {
+			Map<String, PrologTerm> vars = new HashMap<String, PrologTerm>(variables.size());
+			for (String variable : variables) {
+				vars.put(variable, toTerm(queryResult.getTerm(variable), PrologTerm.class));
+			}
 			allVariables.add(vars);
+			next = queryResult.next();
 		}
 		return allVariables;
 	}

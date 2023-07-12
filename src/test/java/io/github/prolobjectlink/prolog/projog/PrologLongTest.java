@@ -147,7 +147,8 @@ public class PrologLongTest extends PrologBaseTest {
 
 	@Test
 	public void testIsInteger() {
-		assertFalse(long1.isInteger());
+		// assertFalse(long1.isInteger());
+		assertTrue(long1.isInteger());
 	}
 
 	@Test

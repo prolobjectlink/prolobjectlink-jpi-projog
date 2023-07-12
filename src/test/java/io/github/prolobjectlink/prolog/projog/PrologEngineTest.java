@@ -45,7 +45,6 @@ import org.junit.Test;
 import org.projog.api.Projog;
 import org.projog.core.parser.Operands;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 
 import io.github.prolobjectlink.prolog.AbstractOperator;
@@ -581,18 +580,18 @@ public class PrologEngineTest extends PrologBaseTest {
 		assertFalse(engine.unify(atom, atom1));
 
 	}
-	
+
 	@Test
 	public final void testMatch() {
 
-		Map<String, PrologTerm>map=new HashMap<String, PrologTerm>(1);
-		PrologTerm variable = provider.newVariable("X",0);
+		Map<String, PrologTerm> map = new HashMap<String, PrologTerm>(1);
+		PrologTerm variable = provider.newVariable("X", 0);
 		PrologTerm atom = provider.newAtom("doe");
-		PrologEngine engine=provider.newEngine();
+		PrologEngine engine = provider.newEngine();
 		map.put("X", atom);
-		assertEquals(map, variable.match(atom));
-		PrologTerm variables=provider.newStructure("struct", variable);
-		PrologTerm atoms=provider.newStructure("struct", atom);
+		assertEquals(map, engine.match(variable, atom));
+		PrologTerm variables = provider.newStructure("struct", variable);
+		PrologTerm atoms = provider.newStructure("struct", atom);
 		map.clear();
 		map.put("X", atom);
 		assertEquals(map, engine.match(variables, atoms));
@@ -1114,15 +1113,14 @@ public class PrologEngineTest extends PrologBaseTest {
 	@Test
 	public final void testCurrentPredicates() {
 		Set<ProjogIndicator> predicates = new HashSet<ProjogIndicator>();
-		Map<PredicateKey, UserDefinedPredicateFactory> m = new org.projog.api.Projog().getKnowledgeBase()
-				.getPredicates().getUserDefinedPredicates();
-		for (Map.Entry<PredicateKey, UserDefinedPredicateFactory> entry : m.entrySet()) {
-			UserDefinedPredicateFactory val = entry.getValue();
-			Iterator<ClauseModel> i = val.getImplications();
-			while (i.hasNext()) {
-				ClauseModel clause = i.next();
-				int arity = clause.getPredicateKey().getNumArgs();
-				String functor = clause.getPredicateKey().getName();
+		org.projog.api.Projog projog = new org.projog.api.Projog();
+		Set<PredicateKey> ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();
+		Map<PredicateKey, UserDefinedPredicateFactory> m = projog.getKnowledgeBase().getPredicates()
+				.getUserDefinedPredicates();
+		for (PredicateKey predicateKey : ps) {
+			if (!m.containsKey(predicateKey)) {
+				int arity = predicateKey.getNumArgs();
+				String functor = predicateKey.getName();
 				ProjogIndicator pi = new ProjogIndicator(functor, arity);
 				predicates.add(pi);
 			}

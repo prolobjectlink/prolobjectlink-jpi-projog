@@ -19,12 +19,13 @@
  */
 package io.github.prolobjectlink.prolog.projog;
 
-import static io.github.prolobjectlink.prolog.AbstractConverter.SIMPLE_ATOM_REGEX;
 import static io.github.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
 import static io.github.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
 import static io.github.prolobjectlink.prolog.PrologTermType.OBJECT_TYPE;
 
-import org.projog.core.parser.Operands;
+import org.projog.core.ProjogException;
+import org.projog.core.math.ArithmeticOperator;
+import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 import org.projog.core.term.TermType;
@@ -104,8 +105,13 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 
 	public final boolean isEvaluable() {
 		if (!isNumber() && !isVariable()) {
-			Operands operands = new Operands();
-			return operands.isDefined(getFunctor());
+			try {
+				return (new org.projog.api.Projog().getKnowledgeBase().getArithmeticOperators().getArithmeticOperator(
+						new PredicateKey(getFunctor(), getArity()))) instanceof ArithmeticOperator;
+			} catch (ProjogException e) {
+				return false;
+			}
+
 		}
 		return false;
 	}
@@ -143,7 +149,7 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 	}
 
 	public final boolean unify(PrologTerm term) {
-		Term otherTerm = fromTerm(term, Term.class);
+		Term otherTerm = ((ProjogTerm) term).value;
 		boolean unify = value.unify(otherTerm);
 		// check variable type for undone instantiation
 		if (otherTerm instanceof Variable) {
@@ -155,9 +161,9 @@ abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
 		return unify;
 	}
 
-	// NOTE: projog not compare numbers by value
+	// NOTE: projog compare variables using hash code
 	public final int compareTo(PrologTerm term) {
-		Term t = fromTerm(term, Term.class);
+		Term t = ((ProjogTerm) term).value;
 		int r = TermComparator.TERM_COMPARATOR.compare(value, t);
 		return r < 0 ? -1 : (r > 0 ? 1 : 0);
 	}

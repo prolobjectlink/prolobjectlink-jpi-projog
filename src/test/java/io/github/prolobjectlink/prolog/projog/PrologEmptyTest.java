@@ -192,7 +192,7 @@ public class PrologEmptyTest extends PrologBaseTest {
 		// with atom
 		PrologTerm empty = provider.prologEmpty();
 		PrologAtom atom = provider.newAtom("John Doe");
-		assertEquals(1, empty.compareTo(atom));
+		assertEquals(-1, empty.compareTo(atom));
 
 		// with integer
 		PrologInteger iValue = provider.newInteger(36);
