@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2023-01-09T10:09:38.304">
-<file name="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogConverter.java">
+<pmd version="4.2.5" timestamp="2023-10-19T09:09:06.361">
+<file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogConverter.java">
 <violation beginline="20" endline="257" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="io.github.prolobjectlink.prolog.projog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
 Too many static imports may lead to messy code
 </violation>
 </file>
-<file name="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogStructure.java">
+<file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogStructure.java">
 <violation beginline="89" endline="91" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="io.github.prolobjectlink.prolog.projog" class="ProjogStructure" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
@@ -14,11 +14,6 @@ Unnecessary final modifier in final class
 </violation>
 <violation beginline="97" endline="99" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="io.github.prolobjectlink.prolog.projog" class="ProjogStructure" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
-</violation>
-</file>
-<file name="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogTerm.java">
-<violation beginline="199" endline="201" begincolumn="33" endcolumn="33" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="io.github.prolobjectlink.prolog.projog" class="ProjogTerm" method="toString" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
-These nested if statements could be combined
 </violation>
 </file>
 </pmd>

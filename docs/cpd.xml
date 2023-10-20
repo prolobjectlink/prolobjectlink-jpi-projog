@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="21" tokens="239">
-<file line="309" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
-<file line="48" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogOperatorSet.java"/>
+<file line="309" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="48" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogOperatorSet.java"/>
 <codefragment>
 <![CDATA[
 		ops = projog.getKnowledgeBase().getOperands();
@@ -30,8 +30,8 @@
 </codefragment>
 </duplication>
 <duplication lines="48" tokens="179">
-<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogInteger.java"/>
-<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogLong.java"/>
+<file line="43" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogInteger.java"/>
+<file line="43" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogLong.java"/>
 <codefragment>
 <![CDATA[
 		super(LONG_TYPE, provider, new IntegerNumber(value.longValue()));
@@ -86,8 +86,8 @@
 </codefragment>
 </duplication>
 <duplication lines="38" tokens="152">
-<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogDouble.java"/>
-<file line="43" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogFloat.java"/>
+<file line="43" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogDouble.java"/>
+<file line="43" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogFloat.java"/>
 <codefragment>
 <![CDATA[
 		super(FLOAT_TYPE, provider, new DecimalFraction(value.floatValue()));
@@ -132,8 +132,8 @@
 </codefragment>
 </duplication>
 <duplication lines="10" tokens="101">
-<file line="104" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
-<file line="353" path="C:\eclipse-jee-2022-03-R-workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="104" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="353" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
 <codefragment>
 <![CDATA[
 		Collection<PrologClause> cls = new LinkedList<PrologClause>();

@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="192" href="#192">192</a> 		<em class="jxr_comment">// with atom</em>
 <a class="jxr_linenumber" name="193" href="#193">193</a> 		PrologTerm empty = provider.prologEmpty();
 <a class="jxr_linenumber" name="194" href="#194">194</a> 		PrologAtom atom = provider.newAtom(<span class="jxr_string">"John Doe"</span>);
-<a class="jxr_linenumber" name="195" href="#195">195</a> 		assertEquals(1, empty.compareTo(atom));
+<a class="jxr_linenumber" name="195" href="#195">195</a> 		assertEquals(-1, empty.compareTo(atom));
 <a class="jxr_linenumber" name="196" href="#196">196</a> 
 <a class="jxr_linenumber" name="197" href="#197">197</a> 		<em class="jxr_comment">// with integer</em>
 <a class="jxr_linenumber" name="198" href="#198">198</a> 		PrologInteger iValue = provider.newInteger(36);
