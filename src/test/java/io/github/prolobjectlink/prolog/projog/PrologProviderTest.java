@@ -207,8 +207,10 @@ public class PrologProviderTest extends PrologBaseTest {
 		list = provider.newList((PrologTerm[]) null);
 		assertEquals(provider.newList((PrologTerm[]) null), list);
 		assertEquals(LIST_TYPE, list.getType());
-		assertEquals("[]", list.getFunctor());
-		assertEquals("[]/0", list.getIndicator());
+//		assertEquals("[]", list.getFunctor());
+//		assertEquals("[]/0", list.getIndicator());
+		assertEquals(".", list.getFunctor());
+		assertEquals("./0", list.getIndicator());
 		assertEquals(0, list.getArity());
 
 	}
@@ -248,8 +250,10 @@ public class PrologProviderTest extends PrologBaseTest {
 		list = provider.newList(new PrologTerm[0], provider.prologEmpty());
 		assertEquals(provider.newList(new PrologTerm[0], provider.prologEmpty()), list);
 		assertEquals(LIST_TYPE, list.getType());
-		assertEquals("[]", list.getFunctor());
-		assertEquals("[]/0", list.getIndicator());
+//		assertEquals("[]", list.getFunctor());
+//		assertEquals("[]/0", list.getIndicator());
+		assertEquals(".", list.getFunctor());
+		assertEquals("./0", list.getIndicator());
 		assertEquals(0, list.getArity());
 
 	}

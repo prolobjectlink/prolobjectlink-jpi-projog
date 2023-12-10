@@ -38,6 +38,7 @@ import java.util.Set;
 
 import org.projog.core.parser.Operands;
 import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Atom;
@@ -226,9 +227,7 @@ public class ProjogEngine extends AbstractEngine implements PrologEngine {
 	public void retract(PrologTerm head, PrologTerm... body) {
 		String b = Arrays.toString(body);
 		b = b.substring(1, b.length() - 1);
-		if (!clause(head, body)) {
-			projog.executeOnce("retract((" + head + " :- " + b + ")).");
-		}
+		projog.executeOnce("retract((" + head + " :- " + b + ")).");
 	}
 
 	@Override

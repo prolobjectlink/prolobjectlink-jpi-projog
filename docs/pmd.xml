@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2023-12-10T09:19:59.014">
+<pmd version="4.2.5" timestamp="2023-12-10T12:03:01.578">
 <file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogConverter.java">
 <violation beginline="20" endline="257" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="io.github.prolobjectlink.prolog.projog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
 Too many static imports may lead to messy code
+</violation>
+</file>
+<file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java">
+<violation beginline="41" endline="41" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statement Rules" package="io.github.prolobjectlink.prolog.projog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.projog.core.predicate.Predicates'
 </violation>
 </file>
 <file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogStructure.java">

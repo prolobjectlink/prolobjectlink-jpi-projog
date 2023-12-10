@@ -87,36 +87,35 @@ class ProjogList extends ProjogTerm implements PrologList {
 	}
 
 	public Iterator<PrologTerm> iterator() {
-		List list = (List) value;
-		return new TuPrologListIter(list);
+		return (value instanceof EmptyList) ? new TuPrologListIter(((EmptyList) value))
+				: new TuPrologListIter(((List) value));
 	}
 
 	public PrologTerm getHead() {
-		List list = (List) value;
-		return toTerm(list.getArgument(0), PrologTerm.class);
+		return (value instanceof EmptyList) ? toTerm(((EmptyList) value).getArgument(0), PrologTerm.class)
+				: toTerm(((List) value).getArgument(0), PrologTerm.class);
 	}
 
 	public PrologTerm getTail() {
-		List list = (List) value;
-		return toTerm(list.getArgument(1), PrologTerm.class);
+		return (value instanceof EmptyList) ? toTerm(((EmptyList) value).getArgument(1), PrologTerm.class)
+				: toTerm(((List) value).getArgument(1), PrologTerm.class);
 	}
 
 	@Override
 	public int getArity() {
-		List list = (List) value;
-		return list.getNumberOfArguments();
+		return (value instanceof EmptyList) ? ((EmptyList) value).getNumberOfArguments()
+				: ((List) value).getNumberOfArguments();
 	}
 
 	@Override
 	public String getFunctor() {
-		List list = (List) value;
-		return list.getName();
+		return (value instanceof EmptyList) ? ((EmptyList) value).getName() : ((List) value).getName();
 	}
 
 	public PrologTerm[] getArguments() {
 		int index = 0;
-		List list = (List) value;
-		Collection<Term>c=ListUtils.toJavaUtilList(list);
+		Term list = (value instanceof EmptyList) ? (EmptyList) value : (List) value;
+		Collection<Term> c = ListUtils.toJavaUtilList(list);
 		PrologTerm[] arguments = new PrologTerm[c.size()];
 		Iterator<? extends Term> i = c.iterator();
 		while (i.hasNext()) {
@@ -131,7 +130,7 @@ class ProjogList extends ProjogTerm implements PrologList {
 
 		private Iterator<? extends Term> i;
 
-		private TuPrologListIter(List list) {
+		private TuPrologListIter(Term list) {
 			i = ListUtils.toJavaUtilList(list).iterator();
 		}
 
