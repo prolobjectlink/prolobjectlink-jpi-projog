@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="21" tokens="239">
-<file line="308" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="307" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
 <file line="48" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogOperatorSet.java"/>
 <codefragment>
 <![CDATA[
@@ -132,8 +132,8 @@
 </codefragment>
 </duplication>
 <duplication lines="10" tokens="101">
-<file line="105" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
-<file line="352" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="104" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
+<file line="351" path="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java"/>
 <codefragment>
 <![CDATA[
 		Collection<PrologClause> cls = new LinkedList<PrologClause>();

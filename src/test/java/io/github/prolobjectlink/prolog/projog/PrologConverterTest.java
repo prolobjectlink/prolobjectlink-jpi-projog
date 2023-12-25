@@ -351,11 +351,11 @@ public class PrologConverterTest extends PrologBaseTest {
 	@Test
 	public final void testFromTermPrologTermPrologTermArray() {
 		assertEquals(
-				Structure.createStructure(":-",
-						new Term[] { new Atom("mcardon"), Structure.createStructure(",",
+				Structure.createStructure(":-", new Term[] { new Atom("mcardon"),
+						Structure.createStructure(",", new Term[] { new Atom("mcardon"), Structure.createStructure(",",
 								new Term[] { new IntegerNumber(1), Structure.createStructure(",",
 										new Term[] { new IntegerNumber(5), Structure.createStructure(",",
-												new Term[] { new Atom("board"), new IntegerNumber(3000) }) }) }) }),
+												new Term[] { new Atom("board"), new IntegerNumber(3000) }) }) }) }) }),
 				converter.fromTerm(mcardon, expecteds0));
 		assertEquals(new Atom("mcardon"), converter.fromTerm(mcardon, (PrologTerm[]) null));
 		assertEquals(new Atom("mcardon"), converter.fromTerm(mcardon, new PrologTerm[0]));
@@ -408,11 +408,11 @@ public class PrologConverterTest extends PrologBaseTest {
 	@Test
 	public final void testFromTermPrologTermPrologTermArrayClassOfK() {
 		assertEquals(
-				Structure.createStructure(":-",
-						new Term[] { new Atom("mcardon"), Structure.createStructure(",",
+				Structure.createStructure(":-", new Term[] { new Atom("mcardon"),
+						Structure.createStructure(",", new Term[] { new Atom("mcardon"), Structure.createStructure(",",
 								new Term[] { new IntegerNumber(1), Structure.createStructure(",",
 										new Term[] { new IntegerNumber(5), Structure.createStructure(",",
-												new Term[] { new Atom("board"), new IntegerNumber(3000) }) }) }) }),
+												new Term[] { new Atom("board"), new IntegerNumber(3000) }) }) }) }) }),
 				converter.fromTerm(mcardon, expecteds0, Term.class));
 	}
 

@@ -38,7 +38,6 @@ import java.util.Set;
 
 import org.projog.core.parser.Operands;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Atom;

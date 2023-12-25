@@ -361,11 +361,11 @@
 <a class="jxr_linenumber" name="351" href="#351">351</a> 	@Test
 <a class="jxr_linenumber" name="352" href="#352">352</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> testFromTermPrologTermPrologTermArray() {
 <a class="jxr_linenumber" name="353" href="#353">353</a> 		assertEquals(
-<a class="jxr_linenumber" name="354" href="#354">354</a> 				Structure.createStructure(<span class="jxr_string">":-"</span>,
-<a class="jxr_linenumber" name="355" href="#355">355</a> 						<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>), Structure.createStructure(<span class="jxr_string">","</span>,
+<a class="jxr_linenumber" name="354" href="#354">354</a> 				Structure.createStructure(<span class="jxr_string">":-"</span>, <strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>),
+<a class="jxr_linenumber" name="355" href="#355">355</a> 						Structure.createStructure(<span class="jxr_string">","</span>, <strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>), Structure.createStructure(<span class="jxr_string">","</span>,
 <a class="jxr_linenumber" name="356" href="#356">356</a> 								<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> IntegerNumber(1), Structure.createStructure(<span class="jxr_string">","</span>,
 <a class="jxr_linenumber" name="357" href="#357">357</a> 										<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> IntegerNumber(5), Structure.createStructure(<span class="jxr_string">","</span>,
-<a class="jxr_linenumber" name="358" href="#358">358</a> 												<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"board"</span>), <strong class="jxr_keyword">new</strong> IntegerNumber(3000) }) }) }) }),
+<a class="jxr_linenumber" name="358" href="#358">358</a> 												<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"board"</span>), <strong class="jxr_keyword">new</strong> IntegerNumber(3000) }) }) }) }) }),
 <a class="jxr_linenumber" name="359" href="#359">359</a> 				converter.fromTerm(mcardon, expecteds0));
 <a class="jxr_linenumber" name="360" href="#360">360</a> 		assertEquals(<strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>), converter.fromTerm(mcardon, (PrologTerm[]) <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="361" href="#361">361</a> 		assertEquals(<strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>), converter.fromTerm(mcardon, <strong class="jxr_keyword">new</strong> PrologTerm[0]));
@@ -418,11 +418,11 @@
 <a class="jxr_linenumber" name="408" href="#408">408</a> 	@Test
 <a class="jxr_linenumber" name="409" href="#409">409</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> testFromTermPrologTermPrologTermArrayClassOfK() {
 <a class="jxr_linenumber" name="410" href="#410">410</a> 		assertEquals(
-<a class="jxr_linenumber" name="411" href="#411">411</a> 				Structure.createStructure(<span class="jxr_string">":-"</span>,
-<a class="jxr_linenumber" name="412" href="#412">412</a> 						<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>), Structure.createStructure(<span class="jxr_string">","</span>,
+<a class="jxr_linenumber" name="411" href="#411">411</a> 				Structure.createStructure(<span class="jxr_string">":-"</span>, <strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>),
+<a class="jxr_linenumber" name="412" href="#412">412</a> 						Structure.createStructure(<span class="jxr_string">","</span>, <strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"mcardon"</span>), Structure.createStructure(<span class="jxr_string">","</span>,
 <a class="jxr_linenumber" name="413" href="#413">413</a> 								<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> IntegerNumber(1), Structure.createStructure(<span class="jxr_string">","</span>,
 <a class="jxr_linenumber" name="414" href="#414">414</a> 										<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> IntegerNumber(5), Structure.createStructure(<span class="jxr_string">","</span>,
-<a class="jxr_linenumber" name="415" href="#415">415</a> 												<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"board"</span>), <strong class="jxr_keyword">new</strong> IntegerNumber(3000) }) }) }) }),
+<a class="jxr_linenumber" name="415" href="#415">415</a> 												<strong class="jxr_keyword">new</strong> Term[] { <strong class="jxr_keyword">new</strong> Atom(<span class="jxr_string">"board"</span>), <strong class="jxr_keyword">new</strong> IntegerNumber(3000) }) }) }) }) }),
 <a class="jxr_linenumber" name="416" href="#416">416</a> 				converter.fromTerm(mcardon, expecteds0, Term.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="417" href="#417">417</a> 	}
 <a class="jxr_linenumber" name="418" href="#418">418</a> 

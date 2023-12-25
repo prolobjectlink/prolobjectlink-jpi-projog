@@ -19,10 +19,12 @@
  */
 package io.github.prolobjectlink.prolog.projog;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 
-import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 
 import io.github.prolobjectlink.prolog.AbstractProvider;
 import io.github.prolobjectlink.prolog.PrologAtom;
@@ -60,17 +62,26 @@ public class Projog extends AbstractProvider implements PrologProvider {
 	}
 
 	public PrologTerm parseTerm(String term) {
-		return term.endsWith(".")
-				? toTerm(SentenceParser.getInstance(term, new org.projog.api.Projog().getKnowledgeBase().getOperands())
-						.parseTerm(), PrologTerm.class)
-				: toTerm(SentenceParser
-						.getInstance(term + ".", new org.projog.api.Projog().getKnowledgeBase().getOperands())
-						.parseTerm(), PrologTerm.class);
+		return toTerm(ProjogUtil.parse(term), PrologTerm.class);
 	}
 
 	public PrologTerm[] parseTerms(String stringTerms) {
-		// TODO Auto-generated method stub
-		return null;
+		Term ptr = ProjogUtil.parse(stringTerms);
+		Deque<PrologTerm> terms = new ArrayDeque<PrologTerm>();
+		while ((ptr.getType() == TermType.LIST || ptr.getType() == TermType.STRUCTURE)
+				&& (ptr.getName().equals(",") && ptr.getNumberOfArguments() == 2)) {
+			terms.add(toTerm(ptr.getArgument(1), PrologTerm.class));
+			ptr = ptr.getArgument(0);
+		}
+		terms.add(toTerm(ptr, PrologTerm.class));
+		PrologTerm[] a = new PrologTerm[terms.size()];
+		int size = terms.size();
+		int index = size - 1;
+		while (index >= 0) {
+			a[index] = terms.pop();
+			index--;
+		}
+		return a;
 	}
 
 	public PrologTerm prologNil() {

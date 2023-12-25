@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2023-12-10T12:03:01.578">
+<pmd version="4.2.5" timestamp="2023-12-25T11:36:20.497">
 <file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogConverter.java">
 <violation beginline="20" endline="257" begincolumn="1" endcolumn="3" rule="TooManyStaticImports" ruleset="Import Statement Rules" package="io.github.prolobjectlink.prolog.projog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#TooManyStaticImports" priority="3">
 Too many static imports may lead to messy code
-</violation>
-</file>
-<file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogEngine.java">
-<violation beginline="41" endline="41" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statement Rules" package="io.github.prolobjectlink.prolog.projog" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
-Avoid unused imports such as 'org.projog.core.predicate.Predicates'
 </violation>
 </file>
 <file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogStructure.java">
@@ -18,6 +13,11 @@ Unnecessary final modifier in final class
 Unnecessary final modifier in final class
 </violation>
 <violation beginline="97" endline="99" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="io.github.prolobjectlink.prolog.projog" class="ProjogStructure" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+Unnecessary final modifier in final class
+</violation>
+</file>
+<file name="C:\prolobjectlink-dev\workspace\prolobjectlink-jpi-projog\src\main\java\io\github\prolobjectlink\prolog\projog\ProjogUtil.java">
+<violation beginline="30" endline="36" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="io.github.prolobjectlink.prolog.projog" class="ProjogUtil" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
 </file>

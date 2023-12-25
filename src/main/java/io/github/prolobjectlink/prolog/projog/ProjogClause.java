@@ -49,4 +49,30 @@ final class ProjogClause extends AbstractClause implements PrologClause {
 		return indicator;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((indicator == null) ? 0 : indicator.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjogClause other = (ProjogClause) obj;
+		if (indicator == null) {
+			if (other.indicator != null)
+				return false;
+		} else if (!indicator.equals(other.indicator)) {
+			return false;
+		}
+		return true;
+	}
+
 }
