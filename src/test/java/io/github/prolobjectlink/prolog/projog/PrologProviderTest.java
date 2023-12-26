@@ -29,17 +29,19 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JFrame;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import io.github.prolobjectlink.prolog.PrologAtom;
-import io.github.prolobjectlink.prolog.PrologDouble;
 import io.github.prolobjectlink.prolog.PrologEntry;
 import io.github.prolobjectlink.prolog.PrologFloat;
 import io.github.prolobjectlink.prolog.PrologInteger;
@@ -297,7 +299,7 @@ public class PrologProviderTest extends PrologBaseTest {
 		assertArrayEquals(new PrologTerm[] { provider.newStructure(employee, name, dpto, scale) },
 				provider.parseTerms("employee(Name,Dpto,Scale)"));
 //		assertArrayEquals(new PrologTerm[] { name }, provider.parseTerms("','(Name,Dpto)"));
-		assertArrayEquals(new PrologTerm[] { name,dpto }, provider.parseTerms("','(Name,Dpto)"));
+		assertArrayEquals(new PrologTerm[] { name, dpto }, provider.parseTerms("','(Name,Dpto)"));
 		assertArrayEquals(new PrologTerm[] { provider.newStructure("','", name) }, provider.parseTerms("','(Name)"));
 //		assertArrayEquals(new PrologTerm[0], provider.parseTerms("15"));
 		assertArrayEquals(new PrologTerm[] { provider.newInteger(15) }, provider.parseTerms("15"));
@@ -319,16 +321,15 @@ public class PrologProviderTest extends PrologBaseTest {
 		PrologAtom atom = (PrologAtom) provider.parseTerm("an_atom");
 		assertEquals(provider.newAtom("an_atom"), atom);
 
-		// be careful this engine remove quotes and rise an exception if not
-		PrologAtom complex_atom = (PrologAtom) provider.parseTerm("an complex atom");
-		System.out.println(provider.newAtom("an complex atom"));
+		// be careful this engine no atom is well formed if not use quotes
+		PrologAtom complex_atom = (PrologAtom) provider.parseTerm("'an complex atom'");
 		assertEquals(provider.newAtom("an complex atom"), complex_atom);
 
-		// IPrologFloat f = (IPrologFloat) factory.parseTerm("3.14");
-		// assertEquals(new FloatAdapter(3.14), f);
+		PrologFloat f = (PrologFloat) provider.parseTerm("3.14");
+		assertEquals(provider.newFloat(3.14), f);
 
-		PrologDouble d = (PrologDouble) provider.parseTerm("3.14");
-		assertEquals(provider.newDouble(3.14), d);
+//		PrologDouble d = (PrologDouble) provider.parseTerm("3.14");
+//		assertEquals(provider.newDouble(3.14), d);
 
 		PrologList list = (PrologList) provider.parseTerm("[0,1,2,3,4,5,6,7,8,9]");
 		assertEquals(provider.newList(new PrologTerm[] { zero, one, two, three, four, five, six, seven, eight, nine }),
@@ -417,8 +418,8 @@ public class PrologProviderTest extends PrologBaseTest {
 	@Test
 	public void testNewReference() {
 		assertEquals("hello world", provider.newReference("hello world").getObject());
-//		assertSame(new JFrame("hello world").getClass(),
-//				provider.newReference(new JFrame("hello world")).getObject().getClass());
+		assertSame(new JFrame("hello world").getClass(),
+				provider.newReference(new JFrame("hello world")).getObject().getClass());
 		assertEquals(100, provider.newReference(100).getObject());
 	}
 

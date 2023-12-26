@@ -19,6 +19,7 @@
  */
 package io.github.prolobjectlink.prolog.projog;
 
+import org.projog.api.Projog;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Term;
 
@@ -29,10 +30,8 @@ final class ProjogUtil {
 
 	static final Term parse(String str) {
 		return str.endsWith(".")
-				? SentenceParser.getInstance(str, new org.projog.api.Projog().getKnowledgeBase().getOperands())
-						.parseTerm()
-				: SentenceParser.getInstance(str + ".", new org.projog.api.Projog().getKnowledgeBase().getOperands())
-						.parseTerm();
+				? SentenceParser.getInstance(str, new Projog().getKnowledgeBase().getOperands()).parseTerm()
+				: SentenceParser.getInstance(str + ".", new Projog().getKnowledgeBase().getOperands()).parseTerm();
 	}
 
 }

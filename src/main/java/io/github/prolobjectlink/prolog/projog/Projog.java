@@ -76,10 +76,9 @@ public class Projog extends AbstractProvider implements PrologProvider {
 		terms.add(toTerm(ptr, PrologTerm.class));
 		PrologTerm[] a = new PrologTerm[terms.size()];
 		int size = terms.size();
-		int index = size - 1;
-		while (index >= 0) {
-			a[index] = terms.pop();
-			index--;
+		int i = size - 1;
+		while (i >= 0) {
+			a[i--] = terms.pop();
 		}
 		return a;
 	}
