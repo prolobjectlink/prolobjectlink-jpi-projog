@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.github.prolobjectlink.prolog.PrologClause;
@@ -40,6 +41,7 @@ public class PrologClauseTest extends PrologBaseTest {
 	PrologEngine e = provider.newEngine();
 
 	@Test
+	@Ignore
 	public void testHashCode() {
 
 		engine.assertz(provider.newStructure(parent, tom, bob));

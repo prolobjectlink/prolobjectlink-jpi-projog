@@ -43,6 +43,7 @@ import static io.github.prolobjectlink.prolog.PrologTermType.VARIABLE_TYPE;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -112,10 +113,6 @@ public class ProjogConverter extends AbstractConverter<Term> implements PrologCo
 			return new ProjogFloat(provider, ((DecimalFraction) prologTerm).getDouble());
 		} else if (prologTerm instanceof IntegerNumber) {
 			return new ProjogInteger(provider, ((IntegerNumber) prologTerm).getLong());
-		} else if (prologTerm instanceof DecimalFraction) {
-			return new ProjogDouble(provider, ((DecimalFraction) prologTerm).getDouble());
-		} else if (prologTerm instanceof IntegerNumber) {
-			return new ProjogLong(provider, ((IntegerNumber) prologTerm).getLong());
 		} else if (prologTerm instanceof Variable) {
 			String name = ((Variable) prologTerm).getId();
 			PrologVariable variable = sharedVariables.get(name);
@@ -129,13 +126,16 @@ public class ProjogConverter extends AbstractConverter<Term> implements PrologCo
 		else if (prologTerm.getType() == TermType.LIST) {
 			int index = 0;
 			List<Term> list = ListUtils.toJavaUtilList(prologTerm);
-			Term[] arguments = new Term[list.size()];
-			Iterator<? extends Term> i = list.iterator();
-			while (i.hasNext()) {
-				Term term = i.next();
-				arguments[index++] = term;
+			if (list != null) {
+				Term[] arguments = new Term[list.size()];
+				Iterator<? extends Term> i = list.iterator();
+				while (i.hasNext()) {
+					Term term = i.next();
+					arguments[index++] = term;
+				}
+				return new ProjogList(provider, arguments);
 			}
-			return new ProjogList(provider, arguments);
+			return new ProjogList(provider);
 		}
 
 		else if (prologTerm instanceof Structure) {
@@ -252,6 +252,26 @@ public class ProjogConverter extends AbstractConverter<Term> implements PrologCo
 	@Override
 	public String toString() {
 		return "ProjogConverter";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(k, ops);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjogConverter other = (ProjogConverter) obj;
+		return Objects.equals(k, other.k) && Objects.equals(ops, other.ops);
 	}
 
 }
