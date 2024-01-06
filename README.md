@@ -3,6 +3,8 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.prolobjectlink/prolobjectlink-jpi-projog/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/io.github.prolobjectlink/prolobjectlink-jpi-projog)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=prolobjectlink_prolobjectlink-jpi-projog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=prolobjectlink_prolobjectlink-jpi-projog)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=prolobjectlink_prolobjectlink-jpi-projog&metric=coverage)](https://sonarcloud.io/summary/new_code?id=prolobjectlink_prolobjectlink-jpi-projog)
+[![JDK 1.8](https://upload.wikimedia.org/wikipedia/commons/7/75/Blue_JDK_1.8%2B_Shield_Badge.svg)]
+https://upload.wikimedia.org/wikipedia/commons/7/75/Blue_JDK_1.8%2B_Shield_Badge.svg
 
 Java Prolog Interface (JPI) is an Application Provider Interface (API) for interaction between Java and Prolog programming languages. Is a bidirectional interface that communicate Java applications with Prolog program or database and Prolog procedures with Java class and methods.
 
