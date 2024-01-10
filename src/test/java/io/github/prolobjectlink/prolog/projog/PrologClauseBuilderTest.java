@@ -152,8 +152,10 @@ public class PrologClauseBuilderTest extends PrologBaseTest {
 		builder.begin("brown", bear).retract();
 		builder.begin("black", cat).retract();
 		builder.begin("gray", elephant).retract();
-		builder.begin("dark", z).neck("black", z).retract();
-		builder.begin("dark", z).neck("brown", z).retract();
+
+		// do not retract rules see org.projog.core.predicate.builtin.kb.Inspect.java
+		// builder.begin("dark", z).neck("black", z).retract();
+		// builder.begin("dark", z).neck("brown", z).retract();
 
 		assertFalse(builder.begin("big", bear).clause());
 		assertFalse(builder.begin("big", elephant).clause());
@@ -161,8 +163,10 @@ public class PrologClauseBuilderTest extends PrologBaseTest {
 		assertFalse(builder.begin("brown", bear).clause());
 		assertFalse(builder.begin("black", cat).clause());
 		assertFalse(builder.begin("gray", elephant).clause());
-		assertFalse(builder.begin("dark", z).neck("black", z).clause());
-		assertFalse(builder.begin("dark", z).neck("brown", z).clause());
+
+		// do not clause for rules see org.projog.core.predicate.builtin.kb.Inspect.java
+		// assertFalse(builder.begin("dark", z).neck("black", z).clause());
+		// assertFalse(builder.begin("dark", z).neck("brown", z).clause());
 
 	}
 
@@ -407,8 +411,10 @@ public class PrologClauseBuilderTest extends PrologBaseTest {
 		builder.begin("brown", bear).retract();
 		builder.begin("black", cat).retract();
 		builder.begin("gray", elephant).retract();
-		builder.begin("dark", z).neck("black", z).retract();
-		builder.begin("dark", z).neck("brown", z).retract();
+
+		// do not retract rules see org.projog.core.predicate.builtin.kb.Inspect.java
+		// builder.begin("dark", z).neck("black", z).retract();
+		// builder.begin("dark", z).neck("brown", z).retract();
 
 		assertFalse(builder.begin("big", bear).clause());
 		assertFalse(builder.begin("big", elephant).clause());
@@ -416,8 +422,10 @@ public class PrologClauseBuilderTest extends PrologBaseTest {
 		assertFalse(builder.begin("brown", bear).clause());
 		assertFalse(builder.begin("black", cat).clause());
 		assertFalse(builder.begin("gray", elephant).clause());
-		assertFalse(builder.begin("dark", z).neck("black", z).clause());
-		assertFalse(builder.begin("dark", z).neck("brown", z).clause());
+
+		// do not clause for rules see org.projog.core.predicate.builtin.kb.Inspect.java
+		// assertFalse(builder.begin("dark", z).neck("black", z).clause());
+		// assertFalse(builder.begin("dark", z).neck("brown", z).clause());
 
 	}
 

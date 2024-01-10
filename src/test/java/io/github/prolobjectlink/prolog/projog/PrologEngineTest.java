@@ -557,6 +557,7 @@ public class PrologEngineTest extends PrologBaseTest {
 	}
 
 	@Test
+	@Ignore // do not retract rules see org.projog.core.predicate.builtin.kb.Inspect.java
 	public final void testRetractPrologTermPrologTermArray() {
 		engine.assertz("mother( X, Y):-parent( X, Y),female( X)");
 		assertEquals(1, engine.getProgramSize());
