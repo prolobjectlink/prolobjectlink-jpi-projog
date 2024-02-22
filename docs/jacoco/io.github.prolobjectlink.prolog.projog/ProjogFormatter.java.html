@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjogFormatter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">ProjogFormatter.java</span></div><h1>ProjogFormatter.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2012 - 2019 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
+import io.github.prolobjectlink.prolog.PrologFormatter;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+<span class="fc" id="L35">final class ProjogFormatter extends Formatter implements PrologFormatter {</span>
+
+	private static final String ERROR = &quot;ERROR&quot;;
+	private static final String WARN = &quot;WARN&quot;;
+	private static final String INFO = &quot;INFO&quot;;
+	private static final String DEBUG = &quot;DEBUG&quot;;
+	private static final String TRACE = &quot;TRACE&quot;;
+
+	@Override
+	public String format(LogRecord record) {
+<span class="nc" id="L45">		StringBuilder buffer = new StringBuilder();</span>
+
+		// retrieve record data
+<span class="nc" id="L48">		String levelString = &quot;&quot;;</span>
+<span class="nc" id="L49">		Level level = record.getLevel();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if (level.intValue() == Level.SEVERE.intValue()) {</span>
+<span class="nc" id="L51">			levelString = ERROR;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">		} else if (level.intValue() == Level.WARNING.intValue()) {</span>
+<span class="nc" id="L53">			levelString = WARN;</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		} else if (level.intValue() == Level.INFO.intValue()) {</span>
+<span class="nc" id="L55">			levelString = INFO;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		} else if (level.intValue() == Level.CONFIG.intValue()) {</span>
+<span class="nc" id="L57">			levelString = DEBUG;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		} else if (level.intValue() == Level.FINE.intValue()) {</span>
+<span class="nc" id="L59">			levelString = DEBUG;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		} else if (level.intValue() == Level.FINER.intValue()) {</span>
+<span class="nc" id="L61">			levelString = DEBUG;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		} else if (level.intValue() == Level.FINEST.intValue()) {</span>
+<span class="nc" id="L63">			levelString = TRACE;</span>
+		}
+
+<span class="nc" id="L66">		long millisecs = record.getMillis();</span>
+<span class="nc" id="L67">		String name = record.getLoggerName();</span>
+<span class="nc" id="L68">		String message = record.getMessage();</span>
+<span class="nc" id="L69">		Throwable throwable = record.getThrown();</span>
+<span class="nc" id="L70">		SimpleDateFormat f = new SimpleDateFormat(&quot;MMM-dd-yyyy HH:mm&quot;);</span>
+<span class="nc" id="L71">		Date resultdate = new Date(millisecs);</span>
+<span class="nc" id="L72">		String date = f.format(resultdate);</span>
+
+		// create log line
+<span class="nc" id="L75">		buffer.append('[');</span>
+<span class="nc" id="L76">		buffer.append(name);</span>
+<span class="nc" id="L77">		buffer.append(']');</span>
+<span class="nc" id="L78">		buffer.append(' ');</span>
+<span class="nc" id="L79">		buffer.append(levelString);</span>
+<span class="nc" id="L80">		buffer.append(' ');</span>
+<span class="nc" id="L81">		buffer.append(date);</span>
+<span class="nc" id="L82">		buffer.append(' ');</span>
+<span class="nc" id="L83">		buffer.append(message);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		if (throwable != null) {</span>
+<span class="nc" id="L85">			buffer.append('\n');</span>
+<span class="nc" id="L86">			buffer.append(throwable);</span>
+<span class="nc" id="L87">			buffer.append('\n');</span>
+<span class="nc" id="L88">			StackTraceElement[] s = throwable.getStackTrace();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">			for (StackTraceElement stackTraceElement : s) {</span>
+<span class="nc" id="L90">				buffer.append(stackTraceElement);</span>
+<span class="nc" id="L91">				buffer.append('\n');</span>
+			}
+		}
+<span class="nc" id="L94">		buffer.append('\n');</span>
+<span class="nc" id="L95">		return &quot;&quot; + buffer + &quot;&quot;;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

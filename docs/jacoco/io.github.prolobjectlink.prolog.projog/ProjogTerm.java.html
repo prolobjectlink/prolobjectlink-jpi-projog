@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjogTerm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">ProjogTerm.java</span></div><h1>ProjogTerm.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2020 - 2022 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import static io.github.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.OBJECT_TYPE;
+
+import org.projog.core.ProjogException;
+import org.projog.core.math.ArithmeticOperator;
+import org.projog.core.predicate.PredicateKey;
+import org.projog.core.term.Term;
+import org.projog.core.term.TermComparator;
+import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
+
+import io.github.prolobjectlink.prolog.AbstractTerm;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+abstract class ProjogTerm extends AbstractTerm implements PrologTerm {
+
+	protected Term value;
+
+	protected ProjogTerm(int type, PrologProvider provider) {
+<span class="fc" id="L43">		super(type, provider);</span>
+<span class="fc" id="L44">	}</span>
+
+	protected ProjogTerm(int type, PrologProvider provider, Term value) {
+<span class="fc" id="L47">		super(type, provider);</span>
+<span class="fc" id="L48">		this.value = value;</span>
+<span class="fc" id="L49">	}</span>
+
+	public final boolean isAtom() {
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		return value.getType() == TermType.ATOM;</span>
+	}
+
+	public final boolean isNumber() {
+<span class="fc bfc" id="L56" title="All 4 branches covered.">		return value.getType() == TermType.FRACTION || value.getType() == TermType.INTEGER;</span>
+	}
+
+	public final boolean isFloat() {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		return type == FLOAT_TYPE;</span>
+	}
+
+	public final boolean isInteger() {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		return value.getType() == TermType.INTEGER;</span>
+	}
+
+	public final boolean isDouble() {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		return value.getType() == TermType.FRACTION;</span>
+	}
+
+	public final boolean isLong() {
+<span class="fc bfc" id="L72" title="All 2 branches covered.">		return type == LONG_TYPE;</span>
+	}
+
+	public final boolean isVariable() {
+<span class="fc bfc" id="L76" title="All 2 branches covered.">		return value.getType() == TermType.VARIABLE;</span>
+	}
+
+	public final boolean isList() {
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		return value.getType() == TermType.LIST;</span>
+	}
+
+	public final boolean isStructure() {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		return value.getType() == TermType.STRUCTURE;</span>
+	}
+
+	public final boolean isNil() {
+<span class="fc bfc" id="L88" title="All 4 branches covered.">		if (!isVariable() &amp;&amp; !isNumber()) {</span>
+<span class="fc" id="L89">			return hasIndicator(&quot;nil&quot;, 0);</span>
+		}
+<span class="fc" id="L91">		return false;</span>
+	}
+
+	public final boolean isEmptyList() {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		return value.getType() == TermType.EMPTY_LIST;</span>
+	}
+
+	public final boolean isAtomic() {
+<span class="fc bfc" id="L99" title="All 2 branches covered.">		return !isCompound();</span>
+	}
+
+	public final boolean isCompound() {
+<span class="fc bfc" id="L103" title="All 6 branches covered.">		return !(isEmptyList()) &amp;&amp; (isList() || isStructure());</span>
+	}
+
+	public final boolean isEvaluable() {
+<span class="fc bfc" id="L107" title="All 4 branches covered.">		if (!isNumber() &amp;&amp; !isVariable()) {</span>
+			try {
+<span class="fc" id="L109">				return (new org.projog.api.Projog().getKnowledgeBase().getArithmeticOperators().getArithmeticOperator(</span>
+<span class="fc" id="L110">						new PredicateKey(getFunctor(), getArity()))) instanceof ArithmeticOperator;</span>
+<span class="fc" id="L111">			} catch (ProjogException e) {</span>
+<span class="fc" id="L112">				return false;</span>
+			}
+
+		}
+<span class="fc" id="L116">		return false;</span>
+	}
+
+	public final boolean isTrueType() {
+<span class="fc" id="L120">		return getObject().equals(true);</span>
+	}
+
+	public final boolean isFalseType() {
+<span class="fc" id="L124">		return getObject().equals(false);</span>
+	}
+
+	public final boolean isNullType() {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">		return getObject() == null;</span>
+	}
+
+	public final boolean isVoidType() {
+<span class="fc bfc" id="L132" title="All 2 branches covered.">		return getObject() == void.class;</span>
+	}
+
+	public final boolean isObjectType() {
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">		return getType() == OBJECT_TYPE;</span>
+	}
+
+	public final boolean isReference() {
+<span class="fc" id="L140">		return isObjectType();</span>
+	}
+
+	public int getArity() {
+<span class="fc" id="L144">		return value.getNumberOfArguments();</span>
+	}
+
+	public String getFunctor() {
+<span class="fc" id="L148">		return value.getName();</span>
+	}
+
+	public final boolean unify(PrologTerm term) {
+<span class="fc" id="L152">		Term otherTerm = ((ProjogTerm) term).value;</span>
+<span class="fc" id="L153">		boolean unify = value.unify(otherTerm);</span>
+		// check variable type for undone instantiation
+<span class="fc bfc" id="L155" title="All 2 branches covered.">		if (otherTerm instanceof Variable) {</span>
+<span class="fc" id="L156">			otherTerm.backtrack();</span>
+		}
+<span class="fc bfc" id="L158" title="All 2 branches covered.">		if (value instanceof Variable) {</span>
+<span class="fc" id="L159">			value.backtrack();</span>
+		}
+<span class="fc" id="L161">		return unify;</span>
+	}
+
+	// NOTE: projog compare variables using hash code
+	public final int compareTo(PrologTerm term) {
+<span class="fc" id="L166">		Term t = ((ProjogTerm) term).value;</span>
+<span class="fc" id="L167">		int r = TermComparator.TERM_COMPARATOR.compare(value, t);</span>
+<span class="fc bfc" id="L168" title="All 4 branches covered.">		return r &lt; 0 ? -1 : (r &gt; 0 ? 1 : 0);</span>
+	}
+
+	@Override
+	public final int hashCode() {
+<span class="fc" id="L173">		final int prime = 31;</span>
+<span class="fc" id="L174">		int result = 1;</span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">		result = prime * result + ((value == null) ? 0 : value.hashCode());</span>
+<span class="fc" id="L176">		return result;</span>
+	}
+
+	@Override
+	public final boolean equals(Object obj) {
+<span class="fc bfc" id="L181" title="All 2 branches covered.">		if (this == obj)</span>
+<span class="fc" id="L182">			return true;</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L184">			return false;</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">		if (getClass() != obj.getClass())</span>
+<span class="fc" id="L186">			return false;</span>
+<span class="fc" id="L187">		ProjogTerm other = (ProjogTerm) obj;</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">		if (value == null) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">			if (other.value != null)</span>
+<span class="nc" id="L190">				return false;</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">		} else if (value.toString().equals(other.value.toString())) {</span>
+<span class="fc" id="L192">			return true;</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">		} else if (!value.unify(other.value)) {</span>
+<span class="fc" id="L194">			return false;</span>
+		}
+<span class="nc" id="L196">		return true;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L201">		return &quot;&quot; + value + &quot;&quot;;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

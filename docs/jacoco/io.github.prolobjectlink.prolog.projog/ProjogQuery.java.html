@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjogQuery.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">ProjogQuery.java</span></div><h1>ProjogQuery.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.StringTokenizer;
+
+import org.projog.api.QueryResult;
+
+import io.github.prolobjectlink.prolog.AbstractEngine;
+import io.github.prolobjectlink.prolog.AbstractQuery;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+final class ProjogQuery extends AbstractQuery implements PrologQuery {
+
+<span class="fc" id="L43">	private List&lt;String&gt; variables = new ArrayList&lt;String&gt;();</span>
+	private org.projog.api.Projog projog;
+	private QueryResult queryResult;
+	private boolean next;
+
+	ProjogQuery(AbstractEngine engine, String query) {
+<span class="fc" id="L49">		super(engine);</span>
+<span class="fc" id="L50">		String delim = &quot;,;() +-*/%=&gt;&lt;&quot;;</span>
+<span class="fc" id="L51">		this.projog = ((ProjogEngine) engine).projog;</span>
+<span class="fc" id="L52">		StringTokenizer tokenizer = new StringTokenizer(query, delim);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		while (tokenizer.hasMoreTokens()) {</span>
+<span class="fc" id="L54">			String token = tokenizer.nextToken();</span>
+<span class="fc bfc" id="L55" title="All 4 branches covered.">			if (token.matches(&quot;[A-Z][A-Za-z0-9_]*&quot;) &amp;&amp; !variables.contains(token)) {</span>
+<span class="fc" id="L56">				variables.add(token);</span>
+			}
+<span class="fc" id="L58">		}</span>
+<span class="fc" id="L59">		queryResult = projog.executeQuery(query + &quot;.&quot;);</span>
+<span class="fc" id="L60">		next = queryResult.next();</span>
+<span class="fc" id="L61">	}</span>
+
+	@Override
+	public boolean hasSolution() {
+<span class="fc" id="L65">		return next;</span>
+	}
+
+	@Override
+	public boolean hasMoreSolutions() {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		return !queryResult.isExhausted();</span>
+	}
+
+	@Override
+	public PrologTerm[] oneSolution() {
+<span class="fc" id="L75">		PrologTerm[] array = new PrologTerm[variables.size()];</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">		for (int i = 0; i &lt; array.length; i++) {</span>
+<span class="fc" id="L77">			array[i] = toTerm(queryResult.getTerm(variables.get(i)), PrologTerm.class);</span>
+		}
+<span class="fc" id="L79">		return array;</span>
+	}
+
+	@Override
+	public Map&lt;String, PrologTerm&gt; oneVariablesSolution() {
+<span class="fc" id="L84">		Map&lt;String, PrologTerm&gt; map = new HashMap&lt;String, PrologTerm&gt;(variables.size());</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">		for (String variable : variables) {</span>
+<span class="fc" id="L86">			map.put(variable, toTerm(queryResult.getTerm(variable), PrologTerm.class));</span>
+<span class="fc" id="L87">		}</span>
+<span class="fc" id="L88">		return map;</span>
+	}
+
+	@Override
+	public PrologTerm[] nextSolution() {
+<span class="fc" id="L93">		PrologTerm[] array = new PrologTerm[variables.size()];</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">		if (next) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">			for (int i = 0; i &lt; array.length; i++) {</span>
+<span class="fc" id="L96">				array[i] = toTerm(queryResult.getTerm(variables.get(i)), PrologTerm.class);</span>
+			}
+<span class="fc" id="L98">			next = queryResult.next();</span>
+		}
+<span class="fc" id="L100">		return array;</span>
+	}
+
+	@Override
+	public Map&lt;String, PrologTerm&gt; nextVariablesSolution() {
+<span class="fc" id="L105">		Map&lt;String, PrologTerm&gt; map = new HashMap&lt;String, PrologTerm&gt;(variables.size());</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">		if (next) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">			for (String variable : variables) {</span>
+<span class="fc" id="L108">				map.put(variable, toTerm(queryResult.getTerm(variable), PrologTerm.class));</span>
+<span class="fc" id="L109">			}</span>
+<span class="fc" id="L110">			next = queryResult.next();</span>
+		}
+<span class="fc" id="L112">		return map;</span>
+	}
+
+	@Override
+	public PrologTerm[][] nSolutions(int n) {
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">		if (n &gt; 0) {</span>
+<span class="fc" id="L118">			int m = 0;</span>
+<span class="fc" id="L119">			int index = 0;</span>
+<span class="fc" id="L120">			List&lt;PrologTerm[]&gt; all = new ArrayList&lt;PrologTerm[]&gt;();</span>
+<span class="pc bpc" id="L121" title="1 of 4 branches missed.">			while (next &amp;&amp; index &lt; n) {</span>
+<span class="fc" id="L122">				PrologTerm[] solutions = new PrologTerm[variables.size()];</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">				for (int i = 0; i &lt; solutions.length; i++) {</span>
+<span class="fc" id="L124">					solutions[i] = toTerm(queryResult.getTerm(variables.get(i)), PrologTerm.class);</span>
+				}
+<span class="fc bfc" id="L126" title="All 2 branches covered.">				m = solutions.length &gt; m ? solutions.length : m;</span>
+<span class="fc" id="L127">				next = queryResult.next();</span>
+<span class="fc" id="L128">				all.add(solutions);</span>
+<span class="fc" id="L129">				index++;</span>
+<span class="fc" id="L130">			}</span>
+
+<span class="fc" id="L132">			PrologTerm[][] allSolutions = new PrologTerm[n][m];</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">			for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L134">				PrologTerm[] solutionArray = all.get(i);</span>
+<span class="fc" id="L135">				System.arraycopy(solutionArray, 0, allSolutions[i], 0, m);</span>
+			}
+<span class="fc" id="L137">			return allSolutions;</span>
+		}
+<span class="nc" id="L139">		return new PrologTerm[0][0];</span>
+	}
+
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public Map&lt;String, PrologTerm&gt;[] nVariablesSolutions(int n) {
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">		if (n &gt; 0) {</span>
+<span class="fc" id="L146">			int index = 0;</span>
+<span class="fc" id="L147">			Map&lt;String, PrologTerm&gt;[] solutionMaps = new HashMap[n];</span>
+<span class="pc bpc" id="L148" title="1 of 4 branches missed.">			while (next &amp;&amp; index &lt; n) {</span>
+<span class="fc" id="L149">				Map&lt;String, PrologTerm&gt; solutionMap = new HashMap&lt;String, PrologTerm&gt;(variables.size());</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">				for (String variable : variables) {</span>
+<span class="fc" id="L151">					solutionMap.put(variable, toTerm(queryResult.getTerm(variable), PrologTerm.class));</span>
+<span class="fc" id="L152">				}</span>
+<span class="fc" id="L153">				solutionMaps[index++] = solutionMap;</span>
+<span class="fc" id="L154">				next = queryResult.next();</span>
+<span class="fc" id="L155">			}</span>
+<span class="fc" id="L156">			return solutionMaps;</span>
+		}
+<span class="nc" id="L158">		return new HashMap[0];</span>
+	}
+
+	@Override
+	public PrologTerm[][] allSolutions() {
+		// n:solutionCount, m:solutionSize
+<span class="fc" id="L164">		int n = 0;</span>
+<span class="fc" id="L165">		int m = 0;</span>
+<span class="fc" id="L166">		List&lt;PrologTerm[]&gt; all = new ArrayList&lt;PrologTerm[]&gt;();</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		while (next) {</span>
+<span class="fc" id="L168">			PrologTerm[] solutions = new PrologTerm[variables.size()];</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">			for (int i = 0; i &lt; solutions.length; i++) {</span>
+<span class="fc" id="L170">				solutions[i] = toTerm(queryResult.getTerm(variables.get(i)), PrologTerm.class);</span>
+			}
+<span class="fc bfc" id="L172" title="All 2 branches covered.">			m = solutions.length &gt; m ? solutions.length : m;</span>
+<span class="fc" id="L173">			next = queryResult.next();</span>
+<span class="fc" id="L174">			all.add(solutions);</span>
+<span class="fc" id="L175">			n++;</span>
+<span class="fc" id="L176">		}</span>
+
+<span class="fc" id="L178">		PrologTerm[][] allSolutions = new PrologTerm[n][m];</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">		for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L180">			PrologTerm[] solutionArray = all.get(i);</span>
+<span class="fc" id="L181">			System.arraycopy(solutionArray, 0, allSolutions[i], 0, m);</span>
+		}
+<span class="fc" id="L183">		return allSolutions;</span>
+	}
+
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public Map&lt;String, PrologTerm&gt;[] allVariablesSolutions() {
+<span class="fc" id="L189">		List&lt;Map&lt;String, PrologTerm&gt;&gt; allVariables = new ArrayList&lt;Map&lt;String, PrologTerm&gt;&gt;();</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">		while (next) {</span>
+<span class="fc" id="L191">			Map&lt;String, PrologTerm&gt; vars = new HashMap&lt;String, PrologTerm&gt;(variables.size());</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">			for (String variable : variables) {</span>
+<span class="fc" id="L193">				vars.put(variable, toTerm(queryResult.getTerm(variable), PrologTerm.class));</span>
+<span class="fc" id="L194">			}</span>
+<span class="fc" id="L195">			allVariables.add(vars);</span>
+<span class="fc" id="L196">			next = queryResult.next();</span>
+<span class="fc" id="L197">		}</span>
+
+<span class="fc" id="L199">		int lenght = allVariables.size();</span>
+<span class="fc" id="L200">		Map&lt;String, PrologTerm&gt;[] allVariablesSolution = new HashMap[lenght];</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">		for (int i = 0; i &lt; lenght; i++) {</span>
+<span class="fc" id="L202">			allVariablesSolution[i] = allVariables.get(i);</span>
+		}
+<span class="fc" id="L204">		return allVariablesSolution;</span>
+	}
+
+	@Override
+	public List&lt;Map&lt;String, PrologTerm&gt;&gt; all() {
+<span class="fc" id="L209">		List&lt;Map&lt;String, PrologTerm&gt;&gt; allVariables = new ArrayList&lt;Map&lt;String, PrologTerm&gt;&gt;();</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">		while (next) {</span>
+<span class="fc" id="L211">			Map&lt;String, PrologTerm&gt; vars = new HashMap&lt;String, PrologTerm&gt;(variables.size());</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">			for (String variable : variables) {</span>
+<span class="fc" id="L213">				vars.put(variable, toTerm(queryResult.getTerm(variable), PrologTerm.class));</span>
+<span class="fc" id="L214">			}</span>
+<span class="fc" id="L215">			allVariables.add(vars);</span>
+<span class="fc" id="L216">			next = queryResult.next();</span>
+<span class="fc" id="L217">		}</span>
+<span class="fc" id="L218">		return allVariables;</span>
+	}
+
+	@Override
+	public void dispose() {
+//		queryResult = null
+<span class="fc" id="L224">	}</span>
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L228">		final int prime = 31;</span>
+<span class="nc" id="L229">		int result = super.hashCode();</span>
+<span class="nc" id="L230">		result = prime * result + Objects.hash(queryResult);</span>
+<span class="nc" id="L231">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L237">			return true;</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L239">			return false;</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L241">			return false;</span>
+<span class="fc" id="L242">		ProjogQuery other = (ProjogQuery) obj;</span>
+<span class="fc" id="L243">		return Objects.equals(queryResult.getVariableIds(), other.queryResult.getVariableIds());</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L248">		return &quot;&quot; + queryResult + &quot;&quot;;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

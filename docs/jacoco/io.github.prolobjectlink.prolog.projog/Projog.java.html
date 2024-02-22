@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Projog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">Projog.java</span></div><h1>Projog.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2020 - 2022 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
+
+import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
+
+import io.github.prolobjectlink.prolog.AbstractProvider;
+import io.github.prolobjectlink.prolog.PrologAtom;
+import io.github.prolobjectlink.prolog.PrologConverter;
+import io.github.prolobjectlink.prolog.PrologDouble;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologFloat;
+import io.github.prolobjectlink.prolog.PrologInteger;
+import io.github.prolobjectlink.prolog.PrologJavaConverter;
+import io.github.prolobjectlink.prolog.PrologList;
+import io.github.prolobjectlink.prolog.PrologLogger;
+import io.github.prolobjectlink.prolog.PrologLong;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologStructure;
+import io.github.prolobjectlink.prolog.PrologTerm;
+import io.github.prolobjectlink.prolog.PrologVariable;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public class Projog extends AbstractProvider implements PrologProvider {
+
+<span class="fc" id="L52">	private static final PrologLogger logger = new ProjogLogger();</span>
+	static final String VERSION = &quot;0.6.0&quot;;
+	static final String NAME = &quot;Projog&quot;;
+
+	public Projog() {
+<span class="fc" id="L57">		super(new ProjogConverter());</span>
+<span class="fc" id="L58">	}</span>
+
+	public Projog(PrologConverter&lt;Term&gt; converter) {
+<span class="fc" id="L61">		super(converter);</span>
+<span class="fc" id="L62">	}</span>
+
+	public PrologTerm parseTerm(String term) {
+<span class="fc" id="L65">		return toTerm(ProjogUtil.parse(term), PrologTerm.class);</span>
+	}
+
+	public PrologTerm[] parseTerms(String stringTerms) {
+<span class="fc" id="L69">		Term ptr = ProjogUtil.parse(stringTerms);</span>
+<span class="fc" id="L70">		Deque&lt;PrologTerm&gt; terms = new ArrayDeque&lt;PrologTerm&gt;();</span>
+<span class="pc bpc" id="L71" title="1 of 4 branches missed.">		while ((ptr.getType() == TermType.LIST || ptr.getType() == TermType.STRUCTURE)</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">				&amp;&amp; (ptr.getName().equals(&quot;,&quot;) &amp;&amp; ptr.getNumberOfArguments() == 2)) {</span>
+<span class="fc" id="L73">			terms.add(toTerm(ptr.getArgument(1), PrologTerm.class));</span>
+<span class="fc" id="L74">			ptr = ptr.getArgument(0);</span>
+		}
+<span class="fc" id="L76">		terms.add(toTerm(ptr, PrologTerm.class));</span>
+<span class="fc" id="L77">		PrologTerm[] a = new PrologTerm[terms.size()];</span>
+<span class="fc" id="L78">		int size = terms.size();</span>
+<span class="fc" id="L79">		int i = size - 1;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		while (i &gt;= 0) {</span>
+<span class="fc" id="L81">			a[i--] = terms.pop();</span>
+		}
+<span class="fc" id="L83">		return a;</span>
+	}
+
+	public PrologTerm prologNil() {
+<span class="fc" id="L87">		return new ProjogNil(this);</span>
+	}
+
+	public PrologTerm prologCut() {
+<span class="fc" id="L91">		return new ProjogCut(this);</span>
+	}
+
+	public PrologTerm prologFail() {
+<span class="fc" id="L95">		return new ProjogFail(this);</span>
+	}
+
+	public PrologTerm prologTrue() {
+<span class="fc" id="L99">		return new ProjogTrue(this);</span>
+	}
+
+	public PrologTerm prologFalse() {
+<span class="fc" id="L103">		return new ProjogFalse(this);</span>
+	}
+
+	public PrologTerm prologEmpty() {
+<span class="fc" id="L107">		return new ProjogEmpty(this);</span>
+	}
+
+	public PrologTerm prologInclude(String file) {
+<span class="nc" id="L111">		return newStructure(&quot;consult&quot;, newAtom(file));</span>
+	}
+
+	public PrologEngine newEngine() {
+<span class="fc" id="L115">		return new ProjogEngine(this);</span>
+	}
+
+	public PrologEngine newEngine(String file) {
+<span class="nc" id="L119">		PrologEngine engine = newEngine();</span>
+<span class="nc" id="L120">		engine.consult(file);</span>
+<span class="nc" id="L121">		return engine;</span>
+	}
+
+	public PrologAtom newAtom(String functor) {
+<span class="fc" id="L125">		return new ProjogAtom(this, functor);</span>
+	}
+
+	public PrologFloat newFloat(Number value) {
+<span class="fc" id="L129">		return new ProjogFloat(this, value);</span>
+	}
+
+	public PrologDouble newDouble(Number value) {
+<span class="fc" id="L133">		return new ProjogDouble(this, value);</span>
+	}
+
+	public PrologInteger newInteger(Number value) {
+<span class="fc" id="L137">		return new ProjogInteger(this, value);</span>
+	}
+
+	public PrologLong newLong(Number value) {
+<span class="fc" id="L141">		return new ProjogLong(this, value);</span>
+	}
+
+	public PrologVariable newVariable(int position) {
+<span class="fc" id="L145">		return new ProjogVariable(this);</span>
+	}
+
+	public PrologVariable newVariable(String name, int position) {
+<span class="fc" id="L149">		return new ProjogVariable(this, name);</span>
+	}
+
+	public PrologList newList() {
+<span class="fc" id="L153">		return new ProjogEmpty(this);</span>
+	}
+
+	public PrologList newList(PrologTerm[] arguments) {
+<span class="fc bfc" id="L157" title="All 4 branches covered.">		if (arguments != null &amp;&amp; arguments.length &gt; 0) {</span>
+<span class="fc" id="L158">			return new ProjogList(this, arguments);</span>
+		}
+<span class="fc" id="L160">		return new ProjogEmpty(this);</span>
+	}
+
+	public PrologList newList(PrologTerm head, PrologTerm tail) {
+<span class="fc" id="L164">		return new ProjogList(this, head, tail);</span>
+	}
+
+	public PrologList newList(PrologTerm[] arguments, PrologTerm tail) {
+<span class="fc" id="L168">		return new ProjogList(this, arguments, tail);</span>
+	}
+
+	public PrologStructure newStructure(String functor, PrologTerm... arguments) {
+<span class="fc" id="L172">		return new ProjogStructure(this, functor, arguments);</span>
+	}
+
+	public PrologTerm newStructure(PrologTerm left, String operator, PrologTerm right) {
+<span class="fc" id="L176">		return new ProjogStructure(this, left, operator, right);</span>
+	}
+
+	public PrologTerm newEntry(PrologTerm key, PrologTerm value) {
+<span class="fc" id="L180">		return new ProjogEntry(this, key, value);</span>
+	}
+
+	public PrologTerm newEntry(Object key, Object value) {
+<span class="fc" id="L184">		PrologJavaConverter transformer = getJavaConverter();</span>
+<span class="fc" id="L185">		PrologTerm keyTerm = transformer.toTerm(key);</span>
+<span class="fc" id="L186">		PrologTerm valueTerm = transformer.toTerm(value);</span>
+<span class="fc" id="L187">		return newEntry(keyTerm, valueTerm);</span>
+	}
+
+	public PrologTerm newMap(Map&lt;PrologTerm, PrologTerm&gt; map) {
+<span class="fc" id="L191">		return new ProjogMap(this, map);</span>
+	}
+
+	public PrologTerm newMap(int initialCapacity) {
+<span class="fc" id="L195">		return new ProjogMap(this, initialCapacity);</span>
+	}
+
+	public PrologTerm newMap() {
+<span class="fc" id="L199">		return new ProjogMap(this);</span>
+	}
+
+	public PrologTerm newReference(Object object) {
+<span class="fc" id="L203">		return new ProjogReference(this, object);</span>
+	}
+
+	public PrologTerm falseReference() {
+<span class="fc" id="L207">		return newReference(false);</span>
+	}
+
+	public PrologTerm trueReference() {
+<span class="fc" id="L211">		return newReference(true);</span>
+	}
+
+	public PrologTerm nullReference() {
+<span class="fc" id="L215">		return newReference(null);</span>
+	}
+
+	public PrologTerm voidReference() {
+<span class="fc" id="L219">		return newReference(void.class);</span>
+	}
+
+	public PrologJavaConverter getJavaConverter() {
+<span class="fc" id="L223">		return new ProjogJavaConverter(this);</span>
+	}
+
+	public PrologLogger getLogger() {
+<span class="fc" id="L227">		return logger;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L232">		return &quot;Projog [converter=&quot; + converter + &quot;]&quot;;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

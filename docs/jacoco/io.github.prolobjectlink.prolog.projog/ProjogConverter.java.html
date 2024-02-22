@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjogConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">ProjogConverter.java</span></div><h1>ProjogConverter.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2020 - 2022 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import static io.github.prolobjectlink.prolog.PrologTermType.ATOM_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.CLASS_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.CUT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.DOUBLE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.FAIL_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.FALSE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.FIELD_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.FLOAT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.INTEGER_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.LIST_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.LONG_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.MAP_ENTRY_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.MAP_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.MIXIN_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.NIL_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.OBJECT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.PARAMETER_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.RESULT_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.STRUCTURE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.TRUE_TYPE;
+import static io.github.prolobjectlink.prolog.PrologTermType.VARIABLE_TYPE;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+
+import org.projog.core.ProjogException;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.kb.KnowledgeBaseUtils;
+import org.projog.core.math.ArithmeticOperators;
+import org.projog.core.predicate.PredicateKey;
+import org.projog.core.term.Atom;
+import org.projog.core.term.DecimalFraction;
+import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.ListFactory;
+import org.projog.core.term.ListUtils;
+import org.projog.core.term.Structure;
+import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
+
+import io.github.prolobjectlink.prolog.AbstractConverter;
+import io.github.prolobjectlink.prolog.PrologAtom;
+import io.github.prolobjectlink.prolog.PrologConverter;
+import io.github.prolobjectlink.prolog.PrologDouble;
+import io.github.prolobjectlink.prolog.PrologFloat;
+import io.github.prolobjectlink.prolog.PrologInteger;
+import io.github.prolobjectlink.prolog.PrologLong;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologTerm;
+import io.github.prolobjectlink.prolog.PrologVariable;
+import io.github.prolobjectlink.prolog.UnknownTermError;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+<span class="fc" id="L80">public class ProjogConverter extends AbstractConverter&lt;Term&gt; implements PrologConverter&lt;Term&gt; {</span>
+
+<span class="fc" id="L82">	KnowledgeBase k = KnowledgeBaseUtils.createKnowledgeBase();</span>
+<span class="fc" id="L83">	ArithmeticOperators ops = k.getArithmeticOperators();</span>
+
+	private boolean checkOperator(String functor, int arity) {
+		try {
+<span class="nc" id="L87">			ops.getArithmeticOperator(new PredicateKey(functor, arity));</span>
+<span class="nc" id="L88">			return true;</span>
+<span class="fc" id="L89">		} catch (ProjogException e) {</span>
+<span class="fc" id="L90">			return false;</span>
+		}
+	}
+
+	@Override
+	public PrologTerm toTerm(Term prologTerm) {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">		if (prologTerm.getType() == TermType.EMPTY_LIST) {</span>
+<span class="fc" id="L97">			return new ProjogEmpty(provider);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">		} else if (prologTerm.getType() == TermType.ATOM) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">			if (prologTerm.getName().equals(&quot;nil&quot;)) {</span>
+<span class="fc" id="L100">				return new ProjogNil(provider);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">			} else if (prologTerm.getName().equals(&quot;!&quot;)) {</span>
+<span class="fc" id="L102">				return new ProjogCut(provider);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">			} else if (prologTerm.getName().equals(&quot;fail&quot;)) {</span>
+<span class="fc" id="L104">				return new ProjogFail(provider);</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">			} else if (prologTerm.getName().equals(&quot;true&quot;)) {</span>
+<span class="fc" id="L106">				return new ProjogTrue(provider);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">			} else if (prologTerm.getName().equals(&quot;false&quot;)) {</span>
+<span class="fc" id="L108">				return new ProjogFalse(provider);</span>
+			} else {
+<span class="fc" id="L110">				return new ProjogAtom(provider, prologTerm.getName());</span>
+			}
+<span class="fc bfc" id="L112" title="All 2 branches covered.">		} else if (prologTerm instanceof DecimalFraction) {</span>
+<span class="fc" id="L113">			return new ProjogFloat(provider, ((DecimalFraction) prologTerm).getDouble());</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">		} else if (prologTerm instanceof IntegerNumber) {</span>
+<span class="fc" id="L115">			return new ProjogInteger(provider, ((IntegerNumber) prologTerm).getLong());</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">		} else if (prologTerm instanceof Variable) {</span>
+<span class="fc" id="L117">			String name = ((Variable) prologTerm).getId();</span>
+<span class="fc" id="L118">			PrologVariable variable = sharedVariables.get(name);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">			if (variable == null) {</span>
+<span class="fc" id="L120">				variable = new ProjogVariable(provider, name);</span>
+<span class="fc" id="L121">				sharedVariables.put(variable.getName(), variable);</span>
+			}
+<span class="fc" id="L123">			return variable;</span>
+		}
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		else if (prologTerm.getType() == TermType.LIST) {</span>
+<span class="fc" id="L127">			int index = 0;</span>
+<span class="fc" id="L128">			List&lt;Term&gt; list = ListUtils.toJavaUtilList(prologTerm);</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">			if (list != null) {</span>
+<span class="fc" id="L130">				Term[] arguments = new Term[list.size()];</span>
+<span class="fc" id="L131">				Iterator&lt;? extends Term&gt; i = list.iterator();</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">				while (i.hasNext()) {</span>
+<span class="fc" id="L133">					Term term = i.next();</span>
+<span class="fc" id="L134">					arguments[index++] = term;</span>
+<span class="fc" id="L135">				}</span>
+<span class="fc" id="L136">				return new ProjogList(provider, arguments);</span>
+			}
+<span class="nc" id="L138">			return new ProjogList(provider);</span>
+		}
+
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">		else if (prologTerm instanceof Structure) {</span>
+
+<span class="fc" id="L143">			Structure struct = (Structure) prologTerm;</span>
+<span class="fc" id="L144">			int arity = struct.getNumberOfArguments();</span>
+<span class="fc" id="L145">			String functor = struct.getName();</span>
+<span class="fc" id="L146">			Term[] arguments = new Term[arity];</span>
+
+			// expression
+
+<span class="pc bpc" id="L150" title="1 of 4 branches missed.">			if (arity == 2 &amp;&amp; checkOperator(functor, arity)) {</span>
+<span class="nc" id="L151">				Term left = struct.getArgument(0);</span>
+<span class="nc" id="L152">				Term right = struct.getArgument(1);</span>
+<span class="nc" id="L153">				return new ProjogStructure(provider, left, functor, right);</span>
+			}
+
+			// structure
+			else {
+<span class="fc bfc" id="L158" title="All 2 branches covered.">				for (int i = 0; i &lt; arity; i++) {</span>
+<span class="fc" id="L159">					arguments[i] = struct.getArgument(i);</span>
+				}
+<span class="fc" id="L161">				return new ProjogStructure(provider, functor, arguments);</span>
+			}
+
+		} else {
+<span class="nc" id="L165">			throw new UnknownTermError(prologTerm);</span>
+		}
+	}
+
+	@Override
+	public Term fromTerm(PrologTerm term) {
+<span class="pc bpc" id="L171" title="7 of 17 branches missed.">		switch (term.getType()) {</span>
+		case NIL_TYPE:
+<span class="nc" id="L173">			return new Atom(&quot;nil&quot;);</span>
+		case CUT_TYPE:
+<span class="fc" id="L175">			return new Atom(&quot;!&quot;);</span>
+		case FAIL_TYPE:
+<span class="fc" id="L177">			return new Atom(&quot;fail&quot;);</span>
+		case TRUE_TYPE:
+<span class="nc" id="L179">			return new Atom(&quot;true&quot;);</span>
+		case FALSE_TYPE:
+<span class="nc" id="L181">			return new Atom(&quot;false&quot;);</span>
+		case ATOM_TYPE:
+<span class="fc" id="L183">			return new Atom(removeQuoted(((PrologAtom) term).getStringValue()));</span>
+		case FLOAT_TYPE:
+<span class="fc" id="L185">			return new DecimalFraction(((PrologFloat) term).getFloatValue());</span>
+		case INTEGER_TYPE:
+<span class="fc" id="L187">			return new IntegerNumber(((PrologInteger) term).getIntegerValue());</span>
+		case DOUBLE_TYPE:
+<span class="fc" id="L189">			return new DecimalFraction(((PrologDouble) term).getDoubleValue());</span>
+		case LONG_TYPE:
+<span class="fc" id="L191">			return new IntegerNumber(((PrologLong) term).getLongValue());</span>
+		case VARIABLE_TYPE:
+<span class="fc" id="L193">			String name = ((PrologVariable) term).getName();</span>
+<span class="fc" id="L194">			Term variable = sharedPrologVariables.get(name);</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">			if (variable == null) {</span>
+<span class="fc" id="L196">				variable = new Variable(name);</span>
+<span class="fc" id="L197">				sharedPrologVariables.put(name, variable);</span>
+			}
+<span class="fc" id="L199">			return variable;</span>
+		case MAP_TYPE:
+		case LIST_TYPE:
+<span class="fc" id="L202">			return ListFactory.createList(fromTermArray(term.getArguments()));</span>
+		case STRUCTURE_TYPE:
+		case MAP_ENTRY_TYPE:
+<span class="fc" id="L205">			String functor = term.getFunctor();</span>
+<span class="fc" id="L206">			Term[] arguments = fromTermArray(term.getArguments());</span>
+<span class="fc" id="L207">			return Structure.createStructure(functor, arguments);</span>
+		case OBJECT_TYPE:
+<span class="nc" id="L209">			return Structure.createStructure(&quot;'@'&quot;, new Term[] { new Atom(&quot;'&quot; + term.getObject() + &quot;'&quot;) });</span>
+		case PARAMETER_TYPE:
+		case RESULT_TYPE:
+		case FIELD_TYPE:
+<span class="nc" id="L213">			name = ((PrologVariable) term).getName();</span>
+<span class="nc" id="L214">			return new Variable(name);</span>
+		case MIXIN_TYPE:
+		case CLASS_TYPE:
+<span class="nc" id="L217">			functor = removeQuoted(term.getFunctor());</span>
+<span class="nc" id="L218">			arguments = fromTermArray(term.getArguments());</span>
+<span class="nc" id="L219">			return Structure.createStructure(functor, arguments);</span>
+		default:
+<span class="nc" id="L221">			throw new UnknownTermError(term);</span>
+		}
+	}
+
+	@Override
+	public Term[] fromTermArray(PrologTerm[] terms) {
+<span class="fc" id="L227">		Term[] prologTerms = new Term[terms.length];</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">		for (int i = 0; i &lt; terms.length; i++) {</span>
+<span class="fc" id="L229">			prologTerms[i] = fromTerm(terms[i]);</span>
+		}
+<span class="fc" id="L231">		return prologTerms;</span>
+	}
+
+	@Override
+	public Term fromTerm(PrologTerm head, PrologTerm[] body) {
+<span class="fc" id="L236">		Term clauseHead = fromTerm(head);</span>
+<span class="fc bfc" id="L237" title="All 4 branches covered.">		if (body != null &amp;&amp; body.length &gt; 0) {</span>
+<span class="fc" id="L238">			Term clauseBody = fromTerm(body[body.length - 1]);</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">			for (int i = body.length - 2; i &gt;= 0; --i) {</span>
+<span class="fc" id="L240">				clauseBody = Structure.createStructure(&quot;,&quot;, new Term[] { fromTerm(body[i]), clauseBody });</span>
+			}
+<span class="fc" id="L242">			return Structure.createStructure(&quot;:-&quot;, new Term[] { clauseHead, clauseBody });</span>
+		}
+<span class="fc" id="L244">		return clauseHead;</span>
+	}
+
+	@Override
+	public PrologProvider createProvider() {
+<span class="fc" id="L249">		return new Projog(this);</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L254">		return &quot;ProjogConverter&quot;;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L259">		final int prime = 31;</span>
+<span class="nc" id="L260">		int result = super.hashCode();</span>
+<span class="nc" id="L261">		result = prime * result + Objects.hash(k, ops);</span>
+<span class="nc" id="L262">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L267" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L268">			return true;</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L270">			return false;</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L272">			return false;</span>
+<span class="nc" id="L273">		ProjogConverter other = (ProjogConverter) obj;</span>
+<span class="nc bnc" id="L274" title="All 4 branches missed.">		return Objects.equals(k, other.k) &amp;&amp; Objects.equals(ops, other.ops);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

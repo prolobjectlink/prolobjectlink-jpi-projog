@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjogOperatorSet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">ProjogOperatorSet.java</span></div><h1>ProjogOperatorSet.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import java.util.AbstractSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+
+import org.projog.api.Projog;
+import org.projog.core.parser.Operands;
+import org.projog.core.predicate.PredicateKey;
+
+import io.github.prolobjectlink.prolog.AbstractOperator;
+import io.github.prolobjectlink.prolog.PrologOperator;
+import io.github.prolobjectlink.prolog.PrologOperatorSet;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+final class ProjogOperatorSet extends AbstractSet&lt;PrologOperator&gt; implements PrologOperatorSet {
+
+<span class="fc" id="L43">	private Set&lt;PrologOperator&gt; operators = new HashSet&lt;PrologOperator&gt;();</span>
+<span class="fc" id="L44">	private Operands ops = new Operands();</span>
+
+<span class="fc" id="L46">	public ProjogOperatorSet() {</span>
+<span class="fc" id="L47">		org.projog.api.Projog projog = new Projog();</span>
+<span class="fc" id="L48">		ops = projog.getKnowledgeBase().getOperands();</span>
+<span class="fc" id="L49">		Set&lt;PredicateKey&gt; ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		for (PredicateKey predicateKey : ps) {</span>
+<span class="fc" id="L51">			String name = predicateKey.getName();</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">			if (ops.isDefined(name)) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">				Object prefix = ops.prefix(name) ? ops.getPrefixPriority(name) : null;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">				Object infix = ops.infix(name) ? ops.getInfixPriority(name) : null;</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">				Object postfix = ops.postfix(name) ? ops.getPostfixPriority(name) : null;</span>
+<span class="pc bpc" id="L56" title="1 of 4 branches missed.">				int priority = prefix != null ? (int) prefix</span>
+<span class="pc bnc" id="L57" title="All 2 branches missed.">						: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">				String specifier = ops.fx(name) ? &quot;fx&quot;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">						: (ops.fy(name) ? &quot;fy&quot;</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">								: (ops.xf(name) ? &quot;xf&quot;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">										: (ops.yf(name) ? &quot;yf&quot;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">												: (ops.xfx(name) ? &quot;xfx&quot;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">														: (ops.xfy(name) ? &quot;xfy&quot;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">																: (ops.yfx(name) ? &quot;yfx&quot; : (&quot;unknow&quot;)))))));</span>
+<span class="fc" id="L65">				AbstractOperator operator = new ProjogOperator(priority, specifier, name);</span>
+<span class="fc" id="L66">				operators.add(operator);</span>
+			}
+<span class="fc" id="L68">		}</span>
+<span class="fc" id="L69">	}</span>
+
+	public boolean currentOp(String opreator) {
+<span class="fc" id="L72">		return ops.isDefined(opreator);</span>
+	}
+
+	@Override
+	public Iterator&lt;PrologOperator&gt; iterator() {
+<span class="fc" id="L77">		return operators.iterator();</span>
+	}
+
+	@Override
+	public int size() {
+<span class="fc" id="L82">		return operators.size();</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="fc" id="L87">		final int prime = 31;</span>
+<span class="fc" id="L88">		int result = super.hashCode();</span>
+<span class="fc" id="L89">		result = prime * result + Objects.hash(operators);</span>
+<span class="fc" id="L90">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		if (this == obj)</span>
+<span class="fc" id="L96">			return true;</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		if (!super.equals(obj))</span>
+<span class="fc" id="L98">			return false;</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L100">			return false;</span>
+<span class="fc" id="L101">		ProjogOperatorSet other = (ProjogOperatorSet) obj;</span>
+<span class="fc" id="L102">		return Objects.equals(operators, other.operators);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

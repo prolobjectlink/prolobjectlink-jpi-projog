@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjogEngine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prolobjectlink-jpi-projog</a> &gt; <a href="index.source.html" class="el_package">io.github.prolobjectlink.prolog.projog</a> &gt; <span class="el_source">ProjogEngine.java</span></div><h1>ProjogEngine.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * prolobjectlink-jpi-projog
+ * %%
+ * Copyright (C) 2019 Prolobjectlink Project
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.github.prolobjectlink.prolog.projog;
+
+import static io.github.prolobjectlink.prolog.PrologLogger.DONT_WORRY;
+import static io.github.prolobjectlink.prolog.PrologLogger.IO;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+import org.projog.core.parser.Operands;
+import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.udp.ClauseModel;
+import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
+import org.projog.core.term.Atom;
+import org.projog.core.term.Structure;
+import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
+
+import io.github.prolobjectlink.prolog.AbstractEngine;
+import io.github.prolobjectlink.prolog.AbstractOperator;
+import io.github.prolobjectlink.prolog.ArrayIterator;
+import io.github.prolobjectlink.prolog.Licenses;
+import io.github.prolobjectlink.prolog.PrologClause;
+import io.github.prolobjectlink.prolog.PrologEngine;
+import io.github.prolobjectlink.prolog.PrologIndicator;
+import io.github.prolobjectlink.prolog.PrologOperator;
+import io.github.prolobjectlink.prolog.PrologProgram;
+import io.github.prolobjectlink.prolog.PrologProvider;
+import io.github.prolobjectlink.prolog.PrologQuery;
+import io.github.prolobjectlink.prolog.PrologTerm;
+
+/**
+ * 
+ * @author Jose Zalacain
+ * @since 1.0
+ */
+public class ProjogEngine extends AbstractEngine implements PrologEngine {
+
+<span class="fc" id="L68">	final org.projog.api.Projog projog = new org.projog.api.Projog();</span>
+<span class="fc" id="L69">	final Set&lt;String&gt; userOperators = new HashSet&lt;String&gt;();</span>
+<span class="fc" id="L70">	private static final Term BODY = new Atom(&quot;true&quot;);</span>
+
+	protected ProjogEngine(PrologProvider provider) {
+<span class="fc" id="L73">		super(provider);</span>
+<span class="fc" id="L74">	}</span>
+
+	public final List&lt;String&gt; verify() {
+<span class="nc" id="L77">		return Arrays.asList(&quot;OK&quot;);</span>
+	}
+
+	@Override
+	public void consult(String path) {
+<span class="fc" id="L82">		projog.consultFile(new File(path));</span>
+<span class="fc" id="L83">	}</span>
+
+	@Override
+	public void consult(Reader reader) {
+<span class="fc" id="L87">		projog.consultReader(reader);</span>
+<span class="fc" id="L88">	}</span>
+
+	@Override
+	public void include(String path) {
+<span class="fc" id="L92">		projog.consultFile(new File(path));</span>
+<span class="fc" id="L93">	}</span>
+
+	@Override
+	public void include(Reader reader) {
+<span class="fc" id="L97">		projog.consultReader(reader);</span>
+<span class="fc" id="L98">	}</span>
+
+	@Override
+	public void persist(String path) {
+<span class="fc" id="L102">		PrintWriter writer = null;</span>
+		try {
+<span class="fc" id="L104">			writer = new PrintWriter(path);</span>
+<span class="fc" id="L105">			Map&lt;PredicateKey, UserDefinedPredicateFactory&gt; m = projog.getKnowledgeBase().getPredicates()</span>
+<span class="fc" id="L106">					.getUserDefinedPredicates();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">			for (Map.Entry&lt;PredicateKey, UserDefinedPredicateFactory&gt; entry : m.entrySet()) {</span>
+<span class="fc" id="L108">				UserDefinedPredicateFactory val = entry.getValue();</span>
+<span class="fc" id="L109">				Iterator&lt;ClauseModel&gt; i = val.getImplications();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">				while (i.hasNext()) {</span>
+<span class="fc" id="L111">					ClauseModel clause = i.next();</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">					if (clause.isFact()) {</span>
+<span class="fc" id="L113">						PrologTerm head = toTerm(clause.getConsequent(), PrologTerm.class);</span>
+<span class="fc" id="L114">						writer.append(&quot;&quot; + head + &quot;.&quot;);</span>
+<span class="fc" id="L115">						writer.append('\n');</span>
+<span class="fc" id="L116">					} else {</span>
+<span class="fc" id="L117">						PrologTerm head = toTerm(clause.getConsequent(), PrologTerm.class);</span>
+<span class="fc" id="L118">						PrologTerm body = toTerm(clause.getAntecedent(), PrologTerm.class);</span>
+<span class="fc" id="L119">						writer.append(&quot;&quot; + head + &quot; :- &quot; + body + &quot;.&quot;);</span>
+<span class="fc" id="L120">						writer.append('\n');</span>
+					}
+<span class="fc" id="L122">				}</span>
+<span class="fc" id="L123">			}</span>
+<span class="nc" id="L124">		} catch (IOException e) {</span>
+<span class="nc" id="L125">			getLogger().warn(getClass(), IO + path, e);</span>
+<span class="nc" id="L126">			getLogger().info(getClass(), DONT_WORRY + path);</span>
+		} finally {
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">			if (writer != null) {</span>
+<span class="fc" id="L129">				writer.close();</span>
+			}
+		}
+<span class="fc" id="L132">	}</span>
+
+	@Override
+	public void abolish(String functor, int arity) {
+<span class="fc" id="L136">		Variable[] args = new Variable[arity];</span>
+<span class="fc" id="L137">		Arrays.fill(args, new Variable());</span>
+<span class="fc" id="L138">		Term p = Structure.createStructure(functor, args);</span>
+<span class="fc" id="L139">		projog.executeOnce(&quot;retractall(&quot; + p + &quot;).&quot;);</span>
+<span class="fc" id="L140">	}</span>
+
+	@Override
+	public void asserta(String stringClause) {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">		if (!clause(stringClause)) {</span>
+<span class="fc" id="L145">			projog.executeOnce(&quot;asserta((&quot; + stringClause + &quot;)).&quot;);</span>
+		}
+<span class="fc" id="L147">	}</span>
+
+	@Override
+	public void asserta(PrologTerm term) {
+<span class="fc bfc" id="L151" title="All 2 branches covered.">		if (!clause(term)) {</span>
+<span class="fc" id="L152">			projog.executeOnce(&quot;asserta((&quot; + term + &quot;)).&quot;);</span>
+		}
+<span class="fc" id="L154">	}</span>
+
+	@Override
+	public void asserta(PrologTerm head, PrologTerm... body) {
+<span class="fc" id="L158">		String b = Arrays.toString(body);</span>
+<span class="fc" id="L159">		b = b.substring(1, b.length() - 1);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		if (!clause(head, body)) {</span>
+<span class="fc" id="L161">			projog.executeOnce(&quot;asserta((&quot; + head + &quot; :- &quot; + b + &quot;)).&quot;);</span>
+		}
+<span class="fc" id="L163">	}</span>
+
+	@Override
+	public void assertz(String stringClause) {
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		if (!clause(stringClause)) {</span>
+<span class="fc" id="L168">			projog.executeOnce(&quot;assertz((&quot; + stringClause + &quot;)).&quot;);</span>
+		}
+<span class="fc" id="L170">	}</span>
+
+	@Override
+	public void assertz(PrologTerm term) {
+<span class="fc bfc" id="L174" title="All 2 branches covered.">		if (!clause(term)) {</span>
+<span class="fc" id="L175">			projog.executeOnce(&quot;assertz((&quot; + term + &quot;)).&quot;);</span>
+		}
+<span class="fc" id="L177">	}</span>
+
+	@Override
+	public void assertz(PrologTerm head, PrologTerm... body) {
+<span class="fc" id="L181">		String b = Arrays.toString(body);</span>
+<span class="fc" id="L182">		b = b.substring(1, b.length() - 1);</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">		if (!clause(head, body)) {</span>
+<span class="fc" id="L184">			projog.executeOnce(&quot;assertz((&quot; + head + &quot; :- &quot; + b + &quot;)).&quot;);</span>
+		}
+<span class="fc" id="L186">	}</span>
+
+	@Override
+	public boolean clause(String t) {
+<span class="fc" id="L190">		return clause(provider.parseTerm(t));</span>
+	}
+
+	@Override
+	public boolean clause(PrologTerm term) {
+<span class="fc" id="L195">		Term h = null;</span>
+<span class="fc" id="L196">		Term b = BODY;</span>
+<span class="fc" id="L197">		Term c = fromTerm(term, Term.class);</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">		if (term.hasIndicator(&quot;:-&quot;, 2)) {</span>
+<span class="fc" id="L199">			h = c.getArgument(0);</span>
+<span class="fc" id="L200">			b = c.getArgument(1);</span>
+		} else {
+<span class="fc" id="L202">			h = c;</span>
+		}
+<span class="fc" id="L204">		return projog.executeQuery(&quot;clause(&quot; + h + &quot;,&quot; + b + &quot;).&quot;).next();</span>
+	}
+
+	@Override
+	public boolean clause(PrologTerm head, PrologTerm... body) {
+<span class="fc" id="L209">		Term clause = fromTerm(head, body, Term.class);</span>
+<span class="fc" id="L210">		Term h = clause.getArgument(0);</span>
+<span class="fc" id="L211">		Term b = clause.getArgument(1);</span>
+<span class="fc" id="L212">		return projog.executeQuery(&quot;clause(&quot; + h + &quot;,&quot; + b + &quot;).&quot;).next();</span>
+	}
+
+	@Override
+	public void retract(String stringClause) {
+<span class="fc" id="L217">		projog.executeOnce(&quot;retract(&quot; + stringClause + &quot;).&quot;);</span>
+<span class="fc" id="L218">	}</span>
+
+	@Override
+	public void retract(PrologTerm term) {
+<span class="fc" id="L222">		projog.executeOnce(&quot;retract(&quot; + term + &quot;).&quot;);</span>
+<span class="fc" id="L223">	}</span>
+
+	@Override
+	public void retract(PrologTerm head, PrologTerm... body) {
+<span class="nc" id="L227">		String b = Arrays.toString(body);</span>
+<span class="nc" id="L228">		b = b.substring(1, b.length() - 1);</span>
+<span class="nc" id="L229">		projog.executeOnce(&quot;retract((&quot; + head + &quot; :- &quot; + b + &quot;)).&quot;);</span>
+<span class="nc" id="L230">	}</span>
+
+	@Override
+	public PrologQuery query(String query) {
+<span class="fc" id="L234">		return new ProjogQuery(this, query);</span>
+	}
+
+	@Override
+	public PrologQuery query(PrologTerm goal) {
+<span class="fc" id="L239">		return query(&quot;&quot; + goal + &quot;&quot;);</span>
+	}
+
+	public final PrologQuery query(PrologTerm[] terms) {
+<span class="nc" id="L243">		Iterator&lt;PrologTerm&gt; i = new ArrayIterator&lt;PrologTerm&gt;(terms);</span>
+<span class="nc" id="L244">		StringBuilder buffer = new StringBuilder();</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">		while (i.hasNext()) {</span>
+<span class="nc" id="L246">			buffer.append(i.next());</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">			if (i.hasNext()) {</span>
+<span class="nc" id="L248">				buffer.append(',');</span>
+			}
+		}
+//		buffer.append(&quot;.&quot;);
+<span class="nc" id="L252">		return query(&quot;&quot; + buffer + &quot;&quot;);</span>
+	}
+
+	public final PrologQuery query(PrologTerm term, PrologTerm... terms) {
+<span class="fc" id="L256">		Iterator&lt;PrologTerm&gt; i = new ArrayIterator&lt;PrologTerm&gt;(terms);</span>
+<span class="fc" id="L257">		StringBuilder buffer = new StringBuilder();</span>
+<span class="fc" id="L258">		buffer.append(&quot;&quot; + term + &quot;&quot;);</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">		while (i.hasNext()) {</span>
+<span class="fc" id="L260">			buffer.append(',');</span>
+<span class="fc" id="L261">			buffer.append(i.next());</span>
+		}
+//		buffer.append(&quot;.&quot;);
+<span class="fc" id="L264">		return query(&quot;&quot; + buffer + &quot;&quot;);</span>
+	}
+
+	@Override
+	public void operator(int priority, String specifier, String operator) {
+<span class="fc" id="L269">		projog.executeOnce(&quot;op(&quot; + priority + &quot;,&quot; + specifier + &quot;, '&quot; + operator + &quot;').&quot;);</span>
+<span class="fc" id="L270">		userOperators.add(operator);</span>
+<span class="fc" id="L271">	}</span>
+
+	@Override
+	public boolean currentPredicate(String functor, int arity) {
+<span class="fc" id="L275">		Set&lt;PredicateKey&gt; ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();</span>
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">		for (PredicateKey predicateKey : ps) {</span>
+<span class="fc" id="L277">			int a = predicateKey.getNumArgs();</span>
+<span class="fc" id="L278">			String f = predicateKey.getName();</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">			if (arity == a &amp;&amp; functor.equals(f)) {</span>
+<span class="fc" id="L280">				return true;</span>
+			}
+<span class="fc" id="L282">		}</span>
+<span class="nc" id="L283">		return false;</span>
+	}
+
+	@Override
+	public boolean currentOperator(int priority, String specifier, String operator) {
+<span class="fc" id="L288">		Operands ops = projog.getKnowledgeBase().getOperands();</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">		Object prefix = ops.prefix(operator) ? ops.getPrefixPriority(operator) : null;</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">		Object infix = ops.infix(operator) ? ops.getInfixPriority(operator) : null;</span>
+<span class="pc bpc" id="L291" title="1 of 2 branches missed.">		Object postfix = ops.postfix(operator) ? ops.getPostfixPriority(operator) : null;</span>
+<span class="fc bfc" id="L292" title="All 4 branches covered.">		int p = prefix != null ? (int) prefix</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">				: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">		String associativity = ops.fx(operator) ? &quot;fx&quot;</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">				: (ops.fy(operator) ? &quot;fy&quot;</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">						: (ops.xf(operator) ? &quot;xf&quot;</span>
+<span class="pc bpc" id="L297" title="1 of 2 branches missed.">								: (ops.yf(operator) ? &quot;yf&quot;</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">										: (ops.xfx(operator) ? &quot;xfx&quot;</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">												: (ops.xfy(operator) ? &quot;xfy&quot;</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">														: (ops.yfx(operator) ? &quot;yfx&quot; : (&quot;unknow&quot;)))))));</span>
+<span class="pc bpc" id="L301" title="2 of 6 branches missed.">		return ops.isDefined(operator) &amp;&amp; p == priority &amp;&amp; associativity.equals(specifier);</span>
+	}
+
+	@Override
+	public Set&lt;PrologOperator&gt; currentOperators() {
+<span class="fc" id="L306">		Operands ops = projog.getKnowledgeBase().getOperands();</span>
+<span class="fc" id="L307">		Set&lt;PrologOperator&gt; operators = new HashSet&lt;PrologOperator&gt;();</span>
+<span class="fc" id="L308">		Set&lt;PredicateKey&gt; ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">		for (PredicateKey predicateKey : ps) {</span>
+<span class="fc" id="L310">			String name = predicateKey.getName();</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">			if (ops.isDefined(name)) {</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">				Object prefix = ops.prefix(name) ? ops.getPrefixPriority(name) : null;</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">				Object infix = ops.infix(name) ? ops.getInfixPriority(name) : null;</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">				Object postfix = ops.postfix(name) ? ops.getPostfixPriority(name) : null;</span>
+<span class="pc bpc" id="L315" title="1 of 4 branches missed.">				int priority = prefix != null ? (int) prefix</span>
+<span class="pc bnc" id="L316" title="All 2 branches missed.">						: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">				String specifier = ops.fx(name) ? &quot;fx&quot;</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">						: (ops.fy(name) ? &quot;fy&quot;</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">								: (ops.xf(name) ? &quot;xf&quot;</span>
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">										: (ops.yf(name) ? &quot;yf&quot;</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">												: (ops.xfx(name) ? &quot;xfx&quot;</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">														: (ops.xfy(name) ? &quot;xfy&quot;</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">																: (ops.yfx(name) ? &quot;yfx&quot; : (&quot;unknow&quot;)))))));</span>
+<span class="fc" id="L324">				AbstractOperator operator = new ProjogOperator(priority, specifier, name);</span>
+<span class="fc" id="L325">				operators.add(operator);</span>
+			}
+<span class="fc" id="L327">		}</span>
+<span class="fc bfc" id="L328" title="All 2 branches covered.">		for (String string : userOperators) {</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">			if (ops.isDefined(string)) {</span>
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">				Object prefix = ops.prefix(string) ? ops.getPrefixPriority(string) : null;</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">				Object infix = ops.infix(string) ? ops.getInfixPriority(string) : null;</span>
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">				Object postfix = ops.postfix(string) ? ops.getPostfixPriority(string) : null;</span>
+<span class="pc bpc" id="L333" title="2 of 4 branches missed.">				int priority = prefix != null ? (int) prefix</span>
+<span class="pc bnc" id="L334" title="All 2 branches missed.">						: (infix != null ? (int) infix : (int) (postfix != null ? postfix : Integer.MIN_VALUE));</span>
+<span class="pc bpc" id="L335" title="1 of 2 branches missed.">				String specifier = ops.fx(string) ? &quot;fx&quot;</span>
+<span class="pc bpc" id="L336" title="1 of 2 branches missed.">						: (ops.fy(string) ? &quot;fy&quot;</span>
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">								: (ops.xf(string) ? &quot;xf&quot;</span>
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">										: (ops.yf(string) ? &quot;yf&quot;</span>
+<span class="pc bpc" id="L339" title="1 of 2 branches missed.">												: (ops.xfx(string) ? &quot;xfx&quot;</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">														: (ops.xfy(string) ? &quot;xfy&quot;</span>
+<span class="pc bnc" id="L341" title="All 2 branches missed.">																: (ops.yfx(string) ? &quot;yfx&quot; : (&quot;unknow&quot;)))))));</span>
+<span class="fc" id="L342">				AbstractOperator operator = new ProjogOperator(priority, specifier, string);</span>
+<span class="fc" id="L343">				operators.add(operator);</span>
+			}
+<span class="fc" id="L345">		}</span>
+<span class="fc" id="L346">		return operators;</span>
+	}
+
+	@Override
+	public Iterator&lt;PrologClause&gt; iterator() {
+<span class="fc" id="L351">		Collection&lt;PrologClause&gt; cls = new LinkedList&lt;PrologClause&gt;();</span>
+<span class="fc" id="L352">		Map&lt;PredicateKey, UserDefinedPredicateFactory&gt; m = projog.getKnowledgeBase().getPredicates()</span>
+<span class="fc" id="L353">				.getUserDefinedPredicates();</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">		for (Map.Entry&lt;PredicateKey, UserDefinedPredicateFactory&gt; entry : m.entrySet()) {</span>
+<span class="fc" id="L355">			UserDefinedPredicateFactory val = entry.getValue();</span>
+<span class="fc" id="L356">			Iterator&lt;ClauseModel&gt; i = val.getImplications();</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">			while (i.hasNext()) {</span>
+<span class="fc" id="L358">				ClauseModel clause = i.next();</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">				if (clause.isFact()) {</span>
+<span class="fc" id="L360">					PrologTerm head = toTerm(clause.getConsequent(), PrologTerm.class);</span>
+<span class="fc" id="L361">					cls.add(new ProjogClause(provider, head, false, false, false));</span>
+<span class="fc" id="L362">				} else {</span>
+<span class="fc" id="L363">					PrologTerm head = toTerm(clause.getConsequent(), PrologTerm.class);</span>
+<span class="fc" id="L364">					PrologTerm body = toTerm(clause.getAntecedent(), PrologTerm.class);</span>
+<span class="fc" id="L365">					cls.add(new ProjogClause(provider, head, body, false, false, false));</span>
+				}
+<span class="fc" id="L367">			}</span>
+<span class="fc" id="L368">		}</span>
+<span class="fc" id="L369">		return new PrologProgramIterator(cls);</span>
+	}
+
+	@Override
+	public int getProgramSize() {
+<span class="fc" id="L374">		int counter = 0;</span>
+<span class="fc" id="L375">		Map&lt;PredicateKey, UserDefinedPredicateFactory&gt; m = projog.getKnowledgeBase().getPredicates()</span>
+<span class="fc" id="L376">				.getUserDefinedPredicates();</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">		for (Map.Entry&lt;PredicateKey, UserDefinedPredicateFactory&gt; entry : m.entrySet()) {</span>
+<span class="fc" id="L378">			UserDefinedPredicateFactory val = entry.getValue();</span>
+<span class="fc" id="L379">			Iterator&lt;ClauseModel&gt; i = val.getImplications();</span>
+<span class="fc bfc" id="L380" title="All 2 branches covered.">			while (i.hasNext()) {</span>
+<span class="fc" id="L381">				i.next();</span>
+<span class="fc" id="L382">				counter++;</span>
+			}
+<span class="fc" id="L384">		}</span>
+<span class="fc" id="L385">		return counter;</span>
+	}
+
+	@Override
+	public PrologProgram getProgram() {
+<span class="nc" id="L390">		return new ProjogProgram(this);</span>
+	}
+
+	@Override
+	public Set&lt;PrologIndicator&gt; getPredicates() {
+<span class="fc" id="L395">		Set&lt;PrologIndicator&gt; predicates = new HashSet&lt;PrologIndicator&gt;();</span>
+<span class="fc" id="L396">		Map&lt;PredicateKey, UserDefinedPredicateFactory&gt; m = projog.getKnowledgeBase().getPredicates()</span>
+<span class="fc" id="L397">				.getUserDefinedPredicates();</span>
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">		for (Map.Entry&lt;PredicateKey, UserDefinedPredicateFactory&gt; entry : m.entrySet()) {</span>
+<span class="nc" id="L399">			UserDefinedPredicateFactory val = entry.getValue();</span>
+<span class="nc" id="L400">			Iterator&lt;ClauseModel&gt; i = val.getImplications();</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">			while (i.hasNext()) {</span>
+<span class="nc" id="L402">				ClauseModel clause = i.next();</span>
+<span class="nc" id="L403">				int arity = clause.getPredicateKey().getNumArgs();</span>
+<span class="nc" id="L404">				String functor = clause.getPredicateKey().getName();</span>
+<span class="nc" id="L405">				ProjogIndicator pi = new ProjogIndicator(functor, arity);</span>
+<span class="nc" id="L406">				predicates.add(pi);</span>
+<span class="nc" id="L407">			}</span>
+<span class="nc" id="L408">		}</span>
+<span class="fc" id="L409">		return predicates;</span>
+	}
+
+	@Override
+	public Set&lt;PrologIndicator&gt; getBuiltIns() {
+<span class="fc" id="L414">		Set&lt;PrologIndicator&gt; builtins = new HashSet&lt;PrologIndicator&gt;();</span>
+<span class="fc" id="L415">		Set&lt;PredicateKey&gt; ps = projog.getKnowledgeBase().getPredicates().getAllDefinedPredicateKeys();</span>
+<span class="fc" id="L416">		Map&lt;PredicateKey, UserDefinedPredicateFactory&gt; m = projog.getKnowledgeBase().getPredicates()</span>
+<span class="fc" id="L417">				.getUserDefinedPredicates();</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">		for (PredicateKey predicateKey : ps) {</span>
+<span class="pc bpc" id="L419" title="1 of 2 branches missed.">			if (!m.containsKey(predicateKey)) {</span>
+<span class="fc" id="L420">				int arity = predicateKey.getNumArgs();</span>
+<span class="fc" id="L421">				String functor = predicateKey.getName();</span>
+<span class="fc" id="L422">				ProjogIndicator pi = new ProjogIndicator(functor, arity);</span>
+<span class="fc" id="L423">				builtins.add(pi);</span>
+			}
+<span class="fc" id="L425">		}</span>
+<span class="fc" id="L426">		return builtins;</span>
+	}
+
+	public String getLicense() {
+<span class="fc" id="L430">		return Licenses.APACHE_V2;</span>
+	}
+
+	public String getVersion() {
+<span class="fc" id="L434">		return Projog.VERSION;</span>
+	}
+
+	public final String getVendor() {
+		// return Projog.NAME
+<span class="fc" id="L439">		return &quot;projog.org&quot;;</span>
+	}
+
+	public String getName() {
+<span class="fc" id="L443">		return Projog.NAME;</span>
+	}
+
+	@Override
+	public void dispose() {
+		// projog.getKnowledgeBase().getPredicates().getUserDefinedPredicates().clear()
+<span class="fc" id="L449">	}</span>
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L453">		final int prime = 31;</span>
+<span class="nc" id="L454">		int result = super.hashCode();</span>
+<span class="nc" id="L455">		result = prime * result + Objects.hash(projog);</span>
+<span class="nc" id="L456">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L461" title="All 2 branches covered.">		if (this == obj)</span>
+<span class="fc" id="L462">			return true;</span>
+<span class="pc bpc" id="L463" title="1 of 2 branches missed.">		if (!super.equals(obj))</span>
+<span class="nc" id="L464">			return false;</span>
+<span class="pc bpc" id="L465" title="1 of 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L466">			return false;</span>
+<span class="fc" id="L467">		ProjogEngine other = (ProjogEngine) obj;</span>
+<span class="fc" id="L468">		return Objects.equals(projog.getClass(), other.projog.getClass());</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>

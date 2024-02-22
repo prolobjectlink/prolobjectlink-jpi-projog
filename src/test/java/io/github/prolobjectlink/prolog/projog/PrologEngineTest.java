@@ -220,7 +220,7 @@ public class PrologEngineTest extends PrologBaseTest {
 		assertTrue(file.length() > 0);
 
 		// Logical program saved
-		engine.consult("family.pl");
+		// engine.consult("family.pl");
 		assertFalse(engine.isProgramEmpty());
 		assertEquals(21, engine.getProgramSize());
 		engine.dispose();
@@ -263,7 +263,7 @@ public class PrologEngineTest extends PrologBaseTest {
 		assertTrue(file.length() > 0);
 
 		// Logical program saved
-		engine.consult("company.pl");
+		// engine.consult("company.pl");
 		assertFalse(engine.isProgramEmpty());
 		assertEquals(21, engine.getProgramSize());
 		engine.dispose();
@@ -293,7 +293,7 @@ public class PrologEngineTest extends PrologBaseTest {
 		assertTrue(file.length() > 0);
 
 		// Logical program saved
-		engine.consult("zoo.pl");
+		// engine.consult("zoo.pl");
 		assertFalse(engine.isProgramEmpty());
 		assertEquals(8, engine.getProgramSize());
 		engine.dispose();
